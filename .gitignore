@@ -31,3 +31,12 @@
 # Debug files
 *.dSYM/
 *.su
+
+# Vim
+*~
+*.swp
+
+# Generated Files
+obj/
+bin/
+data/

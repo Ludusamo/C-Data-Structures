@@ -30,3 +30,6 @@ remove:
 	make clean
 	$(rm) $(BINDIR)/$(TARGET)
 	echo "Executable removed!"
+
+memcheck:
+	valgrind --tool=memcheck $(BINDIR)/$(TARGET)

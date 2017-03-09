@@ -8,7 +8,9 @@ typedef struct {
 	size_t length;
 } Array;
 
-int ctor_array(Array *array, int len);
+int ctor_array(Array *array, size_t len);
 int dtor_array(Array *array);
+
+int insert_array(Array *array, int index, void *val);
 
 #endif // ARRAY_H

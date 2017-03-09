@@ -28,10 +28,21 @@ static void dtor_array_test(void **state) {
 	assert_null(((Array *) (*state))->data);
 }
 
+static void insert_array_test(void **state) {
+	int a = 10;
+	insert_array(*state, 0, &a);
+	assert_int_equal(a, *(int*)(((Array *)(*state))->data[0]));
+	int b = 20;
+	insert_array(*state, 5, &b);
+	assert_int_equal(b, *(int*)(((Array *)(*state))->data[5]));
+	insert_array(*state, 0, &b);
+	assert_int_equal(b, *(int*)(((Array *)(*state))->data[0]));
+}
 
 int run_array_tests() {
 	const struct CMUnitTest tests[] = {
 		cmocka_unit_test(ctor_array_test),
+		cmocka_unit_test(insert_array_test),
 		cmocka_unit_test(dtor_array_test)
 	};
 

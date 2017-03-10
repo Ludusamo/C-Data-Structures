@@ -32,3 +32,8 @@ int insert_array(Array *array, int index, void *val) {
 	memcpy(array->data[index], val, sizeof(int));
 	return 1;
 }
+
+void *access_array(Array *array, int index) {
+	if (!array || !(array->data)) return NULL;
+	return array->data[index];
+}

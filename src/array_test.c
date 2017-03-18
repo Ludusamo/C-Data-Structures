@@ -46,6 +46,21 @@ static void access_array_test(void **state) {
 	assert_int_equal(20, *b);
 }
 
+static void add_array_test(void **state) {
+	for (int i = 0; i < ((Array*)(*state))->length; i++) {
+		insert_array(*state, i, &i);
+	}
+	Array *added_array = add_array(*state, *state);
+	int should_be = 0;
+	Iter *iter = iter_array(added_array);
+	void *i;
+	foreach(i, iter) {
+		assert_int_equal((should_be++) % 10, *((int*)i));
+	}
+	free(iter);
+	free(added_array);
+}
+
 static void iter_array_test(void **state) {
 	for (int i = 0; i < ((Array*)(*state))->length; i++) {
 		insert_array(*state, i, &i);
@@ -65,6 +80,7 @@ int run_array_tests() {
 		cmocka_unit_test(insert_array_test),
 		cmocka_unit_test(access_array_test),
 		cmocka_unit_test(iter_array_test),
+		cmocka_unit_test(add_array_test),
 		cmocka_unit_test(dtor_array_test)
 	};
 

@@ -38,6 +38,24 @@ void *access_array(Array *array, int index) {
 	return array->data[index];
 }
 
+Array *add_array(Array *arr1, Array *arr2) {
+	Iter *iter1 = iter_array(arr1);
+	Iter *iter2 = iter_array(arr2);
+	Array *new_array = malloc(sizeof(Array));
+	ctor_array(new_array, arr1->length + arr2->length);
+	int index = 0;
+	void *i;
+	foreach(i, iter1) {
+		new_array->data[index++] = i;
+	}
+	foreach(i, iter2) {
+		new_array->data[index++] = i;
+	}
+	free(iter1);
+	free(iter2);
+	return new_array;
+}
+
 void *next_iter_array(Iter **iter) {
 	return access_array(((Array*)((*iter)->data)), (*iter)->cur++);
 }

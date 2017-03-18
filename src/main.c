@@ -1,5 +1,8 @@
 #include "array_test.h"
+#include "iter_test.h"
 
 int main() {
-	return run_array_tests();
+	run_array_tests();
+	run_iter_tests();
+	return 0;
 }

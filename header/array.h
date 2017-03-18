@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "iter.h"
 
 typedef struct {
 	void **data;
@@ -14,5 +15,10 @@ int dtor_array(Array *array);
 
 int insert_array(Array *array, int index, void *val);
 void *access_array(Array *array, int index);
+
+void *next_iter_array(Iter **iter);
+int end_iter_array(Iter **iter);
+Iter *iter_array(Array *array);
+void destroy_iter_array(Iter *iter);
 
 #endif // ARRAY_H

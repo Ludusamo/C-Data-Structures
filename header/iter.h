@@ -8,7 +8,7 @@ typedef struct Iter Iter;
 struct Iter {
 	void **data;
 	void **end_data;
-	void *cur;
+	int cur;
 	void *(*next)(Iter **iter);
 	int (*end)(Iter **iter);
 };

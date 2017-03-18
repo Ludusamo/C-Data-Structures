@@ -46,11 +46,25 @@ static void access_array_test(void **state) {
 	assert_int_equal(20, *b);
 }
 
+static void iter_array_test(void **state) {
+	for (int i = 0; i < ((Array*)(*state))->length; i++) {
+		insert_array(*state, i, &i);
+	}
+	int should_be = 0;
+	Iter *iter = iter_array(*state);
+	void *i;
+	foreach(i, iter) {
+		assert_int_equal(should_be++, *((int*)i));
+	}
+	free(iter);
+}
+
 int run_array_tests() {
 	const struct CMUnitTest tests[] = {
 		cmocka_unit_test(ctor_array_test),
 		cmocka_unit_test(insert_array_test),
 		cmocka_unit_test(access_array_test),
+		cmocka_unit_test(iter_array_test),
 		cmocka_unit_test(dtor_array_test)
 	};
 

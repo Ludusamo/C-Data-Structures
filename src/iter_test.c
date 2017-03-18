@@ -1,11 +1,11 @@
 #include "iter_test.h"
 
 int end_test(Iter **iter) {
-	return *((int*)(*iter)->cur) <= *((int*)(*iter)->end_data);
+	return (*iter)->cur <= *((int*)(*iter)->end_data);
 }
 
 void *next_test(Iter **iter) {
-	return (*iter)->data[(*((int*)(*iter)->cur))++];
+	return (*iter)->data[(*iter)->cur++];
 }
 
 static int iter_test_setup(void **state) {
@@ -24,8 +24,7 @@ static int iter_test_setup(void **state) {
 	}
 	iter->data = arr;
 		
-	iter->cur = malloc(sizeof(int));
-	*((int*)iter->cur) = 0;
+	iter->cur = 0;
 	iter->next = &next_test;
 	iter->end = &end_test;
 
@@ -37,7 +36,6 @@ static int iter_test_teardown(void **state) {
 	if (state) {
 		free(((Iter_Test_Container*)*state)->array);
 		free((((Iter_Test_Container*)*state)->iter)->end_data);
-		free((((Iter_Test_Container*)*state)->iter)->cur);
 		for (size_t i = 0; i < 10; i++) {
 			free(((Iter_Test_Container*)*state)->array[i]);
 		}

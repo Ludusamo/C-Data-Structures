@@ -12,12 +12,6 @@ int ctor_array(Array *array, size_t len) {
 int dtor_array(Array *array) {
 	if (array) {
 		if (array->data) {
-			for (size_t i = 0; i < array->length; i++) {
-				if (array->data[i]) {
-					free(array->data[i]);
-					array->data[i] = NULL;
-				}
-			}
 			free(array->data);
 			array->data = NULL;
 		}
@@ -25,11 +19,9 @@ int dtor_array(Array *array) {
 	return 1;
 }
 
-int insert_array(Array *array, int index, void *val) {
+int set_array(Array *array, int index, void *val) {
 	if (!array || !(array->data)) return 0;
-	if (array->data[index]) free(array->data[index]);
-	array->data[index] = malloc(sizeof(val));
-	memcpy(array->data[index], val, sizeof(int));
+	array->data[index] = val;
 	return 1;
 }
 
@@ -47,10 +39,10 @@ Array *add_array(Array *arr1, Array *arr2) {
 	int index = 0;
 	void *i;
 	foreach(i, iter1) {
-		insert_array(new_array, index++, i);
+		set_array(new_array, index++, i);
 	}
 	foreach(i, iter2) {
-		insert_array(new_array, index++, i);
+		set_array(new_array, index++, i);
 	}
 	return new_array;
 }

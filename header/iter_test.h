@@ -14,8 +14,8 @@ typedef struct {
 	Iter *iter;
 } Iter_Test_Container;
 
-int end_test(Iter **iter);
-void *next_test(Iter **iter);
+int end_test(Iter *iter);
+void *next_test(Iter *iter);
 
 static int iter_test_setup(void **state);
 static int iter_test_teardown(void **state);

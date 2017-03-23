@@ -1,11 +1,11 @@
 #include "iter_test.h"
 
-int end_test(Iter **iter) {
-	return (*iter)->cur <= *((int*)(*iter)->end_data);
+int end_test(Iter *iter) {
+	return iter->cur <= *((int*)iter->end_data);
 }
 
-void *next_test(Iter **iter) {
-	return (*iter)->data[(*iter)->cur++];
+void *next_test(Iter *iter) {
+	return iter->data[iter->cur++];
 }
 
 static int iter_test_setup(void **state) {
@@ -47,7 +47,7 @@ static int iter_test_teardown(void **state) {
 }
 
 static void iter_test(void **state) {
-	Iter *iter = ((Iter*)((Iter_Test_Container*)*state)->iter);
+	Iter iter = *((Iter*)((Iter_Test_Container*)*state)->iter);
 	int should_be = 0;
 	void *i;
 	foreach(i, iter) {

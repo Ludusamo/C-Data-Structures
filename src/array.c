@@ -39,37 +39,36 @@ void *access_array(Array *array, int index) {
 }
 
 Array *add_array(Array *arr1, Array *arr2) {
-	Iter *iter1 = iter_array(arr1);
-	Iter *iter2 = iter_array(arr2);
+	Iter iter1, iter2;
+	iter_array(&iter1, arr1);
+	iter_array(&iter2, arr2);
 	Array *new_array = malloc(sizeof(Array));
 	ctor_array(new_array, arr1->length + arr2->length);
 	int index = 0;
 	void *i;
 	foreach(i, iter1) {
-		new_array->data[index++] = i;
+		insert_array(new_array, index++, i);
 	}
 	foreach(i, iter2) {
-		new_array->data[index++] = i;
+		insert_array(new_array, index++, i);
 	}
-	free(iter1);
-	free(iter2);
 	return new_array;
 }
 
-void *next_iter_array(Iter **iter) {
-	return access_array(((Array*)((*iter)->data)), (*iter)->cur++);
+void *next_iter_array(Iter *iter) {
+	return access_array(((Array*)(iter->data)), iter->cur++);
 }
 
-int end_iter_array(Iter **iter) {
-	return (*iter)->cur <= *((int*)(*iter)->end_data);
+int end_iter_array(Iter *iter) {
+	return iter->cur <= *((int*)iter->end_data);
 }
 
-Iter *iter_array(Array *array) {
-	Iter *iter = malloc(sizeof(Iter));
+int iter_array(Iter *iter, Array *array) {
+	if (!iter) iter = malloc(sizeof(Iter));
 	iter->data = (void*) array;
 	iter->end_data = (void*) &(array->length);
 	iter->cur = 0;
 	iter->next = &next_iter_array;
 	iter->end = &end_iter_array;
-	return iter;
+	return 1;
 }

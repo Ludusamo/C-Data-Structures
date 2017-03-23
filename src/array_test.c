@@ -52,12 +52,13 @@ static void add_array_test(void **state) {
 	}
 	Array *added_array = add_array(*state, *state);
 	int should_be = 0;
-	Iter *iter = iter_array(added_array);
+	Iter iter;
+	iter_array(&iter, added_array);
 	void *i;
 	foreach(i, iter) {
 		assert_int_equal((should_be++) % 10, *((int*)i));
 	}
-	free(iter);
+	dtor_array(added_array);
 	free(added_array);
 }
 
@@ -66,12 +67,12 @@ static void iter_array_test(void **state) {
 		insert_array(*state, i, &i);
 	}
 	int should_be = 0;
-	Iter *iter = iter_array(*state);
+	Iter iter;
+	iter_array(&iter, *state);
 	void *i;
 	foreach(i, iter) {
 		assert_int_equal(should_be++, *((int*)i));
 	}
-	free(iter);
 }
 
 int run_array_tests() {

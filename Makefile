@@ -32,4 +32,4 @@ remove:
 	echo "Executable removed!"
 
 memcheck:
-	valgrind --tool=memcheck $(BINDIR)/$(TARGET)
+	valgrind --leak-check=full --tool=memcheck $(BINDIR)/$(TARGET)

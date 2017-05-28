@@ -37,30 +37,45 @@ Array *add_array(Array *arr1, Array *arr2) {
 	Array *new_array = malloc(sizeof(Array));
 	ctor_array(new_array, arr1->length + arr2->length);
 	int index = 0;
-	void *i;
+	Iter i;
 	foreach(i, iter1) {
-		set_array(new_array, index++, i);
+		set_array(new_array, index++, i.val(&i));
 	}
 	foreach(i, iter2) {
-		set_array(new_array, index++, i);
+		set_array(new_array, index++, i.val(&i));
 	}
+	destroy_iter_array(&iter1);
+	destroy_iter_array(&iter2);
 	return new_array;
 }
 
-void *next_iter_array(Iter *iter) {
-	return access_array(((Array*)(iter->data)), iter->cur++);
+void next_iter_array(Iter *self) {
+	*((int*)self->data[1]) += 1;
 }
 
-int end_iter_array(Iter *iter) {
-	return iter->cur <= *((int*)iter->end_data);
+int done_iter_array(const Iter *self) {
+	return *((int*)self->data[1]) < *((int*) self->data[2]);
+}
+
+void *val_iter_array(const Iter *self) {
+	return access_array((Array*) self->data[0],*((int*) self->data[1]));
 }
 
 int iter_array(Iter *iter, Array *array) {
-	if (!iter) iter = malloc(sizeof(Iter));
-	iter->data = (void*) array;
-	iter->end_data = (void*) &(array->length);
-	iter->cur = 0;
+	iter->data = calloc(sizeof(void*), 3);
+	iter->data[0] = (void*) array;
+	iter->data[1] = malloc(sizeof(int));
+	iter->data[2] = malloc(sizeof(int));
+	*((int*)(iter->data[1])) = 0;
+	*((int*)(iter->data[2])) = array->length;;
 	iter->next = &next_iter_array;
-	iter->end = &end_iter_array;
+	iter->done = &done_iter_array;
+	iter->val = &val_iter_array;
 	return 1;
+}
+
+void destroy_iter_array(Iter *iter) {
+	free(iter->data[1]);
+	free(iter->data[2]);
+	free(iter->data);
 }

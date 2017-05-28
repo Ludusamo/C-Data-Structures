@@ -1,32 +1,40 @@
 #include "iter_test.h"
+#include "stdio.h"
 
-int end_test(Iter *iter) {
-	return iter->cur <= *((int*)iter->end_data);
+void next_test(Iter *self) {
+	*((int*)self->data[1]) += 1;
 }
 
-void *next_test(Iter *iter) {
-	return iter->data[iter->cur++];
+int done_test(const Iter *self) {
+	return *((int*)self->data[1]) != *((int*) self->data[2]);
+}
+
+void *val_test(const Iter *self) {
+	return &((int*) self->data[0])[*((int*) self->data[1])];
 }
 
 static int iter_test_setup(void **state) {
-	Iter_Test_Container *itc = malloc(sizeof(Iter_Test_Container));
-	itc->array = calloc(sizeof(void*), 10);
-	itc->iter = malloc(sizeof(Iter));
-
-	void **arr = itc->array;
-
-	Iter *iter = itc->iter;
-	iter->end_data = malloc(sizeof(int*));
-	*((int*)iter->end_data) = 10;
-	for (size_t i = 0; i < 10; i++) {
-		arr[i] = malloc(sizeof(int));
-		*((int*)arr[i]) = i;
+	int *arr = calloc(sizeof(int), 10);
+	for (int i = 0; i < 10; i++) {
+		arr[i] = i;
 	}
-	iter->data = arr;
-		
-	iter->cur = 0;
+
+	Iter *iter = malloc(sizeof(Iter));
 	iter->next = &next_test;
-	iter->end = &end_test;
+	iter->done = &done_test;
+	iter->val = &val_test;
+
+	iter->data = calloc(sizeof(void*), 3);
+
+	iter->data[0] = arr;
+	iter->data[1] = malloc(sizeof(int));
+	iter->data[2] = malloc(sizeof(int));
+	*(int*)(iter->data[1]) = 0;
+	*(int*)(iter->data[2]) = 10;
+
+	Iter_Test_Container *itc = malloc(sizeof(Iter_Test_Container));
+	itc->arr = arr;
+	itc->iter = iter;
 
 	*state = itc;
 	return 0;
@@ -34,24 +42,26 @@ static int iter_test_setup(void **state) {
 
 static int iter_test_teardown(void **state) {
 	if (state) {
-		free(((Iter_Test_Container*)*state)->array);
-		free((((Iter_Test_Container*)*state)->iter)->end_data);
-		for (size_t i = 0; i < 10; i++) {
-			free(((Iter_Test_Container*)*state)->array[i]);
-		}
-		free(((Iter_Test_Container*)*state)->iter);
-		free(*state);
+		Iter_Test_Container *itc = *state;
+		Iter *iter = (Iter *)itc->iter;
+		free(iter->data[1]);
+		free(iter->data[2]);
+		free(iter->data);
+		free(iter);
+		free(itc->arr);
+		free(itc);
 		state = NULL;
 	}
 	return 0;
 }
 
 static void iter_test(void **state) {
-	Iter iter = *((Iter*)((Iter_Test_Container*)*state)->iter);
+	Iter_Test_Container *itc = *state;
+	Iter *iter = ((Iter *) itc->iter);
 	int should_be = 0;
-	void *i;
-	foreach(i, iter) {
-		assert_int_equal(should_be++, *((int*)i));
+
+	for (Iter *i = iter; i->done(i); i->next(i)) {
+		assert_int_equal(should_be++, *((int*)i->val(i)));
 	}
 }
 

@@ -10,12 +10,13 @@
 #include <cmocka.h>
 
 typedef struct {
-	void **array;
+	int *arr;
 	Iter *iter;
 } Iter_Test_Container;
 
-int end_test(Iter *iter);
-void *next_test(Iter *iter);
+void next_test(Iter *self);
+int done_test(const Iter *self);
+void *val_test(const Iter *self);
 
 static int iter_test_setup(void **state);
 static int iter_test_teardown(void **state);

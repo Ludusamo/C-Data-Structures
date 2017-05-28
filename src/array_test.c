@@ -28,57 +28,77 @@ static void dtor_array_test(void **state) {
 	assert_null(((Array *) (*state))->data);
 }
 
-static void insert_array_test(void **state) {
-	int a = 10;
-	insert_array(*state, 0, &a);
-	assert_int_equal(a, *(int*)(((Array *)(*state))->data[0]));
-	int b = 20;
-	insert_array(*state, 5, &b);
-	assert_int_equal(b, *(int*)(((Array *)(*state))->data[5]));
-	insert_array(*state, 0, &b);
-	assert_int_equal(b, *(int*)(((Array *)(*state))->data[0]));
+static void set_array_test(void **state) {
+	int *a = malloc(sizeof(int));
+	*a = 10;
+	set_array(*state, 0, a);
+	assert_int_equal(*a, *(int*)(((Array *)(*state))->data[0]));
+	int *b = malloc(sizeof(int));
+	*b = 20;
+	set_array(*state, 5, b);
+	assert_int_equal(*b, *(int*)(((Array *)(*state))->data[5]));
+	set_array(*state, 0, b);
+	assert_int_equal(*b, *(int*)(((Array *)(*state))->data[0]));
+	free(a);
+	free(b);
 }
 
 static void access_array_test(void **state) {
-	int *a = (int *) access_array(*state, 0);
-	assert_int_equal(20, *a);
-	int *b = (int *) access_array(*state, 5);
-	assert_int_equal(20, *b);
+	int *a = malloc(sizeof(int));
+	*a = 20;
+	set_array(*state, 0, a);
+	int *b = malloc(sizeof(int));
+	*b = 20;
+	set_array(*state, 5, b);
+	int *c = (int *) access_array(*state, 0);
+	assert_int_equal(20, *c);
+	int *d = (int *) access_array(*state, 5);
+	assert_int_equal(20, *d);
+	free(a);
+	free(b);
 }
 
 static void add_array_test(void **state) {
+	int *testArr = calloc(sizeof(int), ((Array*)(*state))->length);
 	for (int i = 0; i < ((Array*)(*state))->length; i++) {
-		insert_array(*state, i, &i);
+		testArr[i] = i;
+		set_array(*state, i, &testArr[i]);
 	}
 	Array *added_array = add_array(*state, *state);
 	int should_be = 0;
 	Iter iter;
 	iter_array(&iter, added_array);
-	void *i;
+	Iter i;
 	foreach(i, iter) {
-		assert_int_equal((should_be++) % 10, *((int*)i));
+		assert_int_equal((should_be++) % 10, *(int*)i.val(&i));
 	}
+	destroy_iter_array(&iter);
 	dtor_array(added_array);
+	free(testArr);
 	free(added_array);
 }
 
 static void iter_array_test(void **state) {
+	int *testArr = calloc(sizeof(int), ((Array*)(*state))->length);
 	for (int i = 0; i < ((Array*)(*state))->length; i++) {
-		insert_array(*state, i, &i);
+		testArr[i] = i;
+		set_array(*state, i, &testArr[i]);
 	}
 	int should_be = 0;
 	Iter iter;
 	iter_array(&iter, *state);
-	void *i;
+	Iter i;
 	foreach(i, iter) {
-		assert_int_equal(should_be++, *((int*)i));
+		assert_int_equal(should_be++, *((int*)i.val(&i)));
 	}
+	destroy_iter_array(&iter);
+	free(testArr);
 }
 
 int run_array_tests() {
 	const struct CMUnitTest tests[] = {
 		cmocka_unit_test(ctor_array_test),
-		cmocka_unit_test(insert_array_test),
+		cmocka_unit_test(set_array_test),
 		cmocka_unit_test(access_array_test),
 		cmocka_unit_test(iter_array_test),
 		cmocka_unit_test(add_array_test),

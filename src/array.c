@@ -13,7 +13,7 @@ int dtor_array(Array *array) {
 	if (array) {
 		if (array->data) {
 			free(array->data);
-			array->data = NULL;
+			array->data = 0;
 		}
 	}
 	return 1;
@@ -26,7 +26,7 @@ int set_array(Array *array, int index, void *val) {
 }
 
 void *access_array(Array *array, int index) {
-	if (!array || !(array->data)) return NULL;
+	if (!array || !(array->data)) return 0;
 	return array->data[index];
 }
 

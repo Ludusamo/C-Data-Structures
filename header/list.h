@@ -5,7 +5,6 @@
 
 typedef struct {
 	Array *array;
-	int length;
 } List;
 
 int ctor_list(List *list);
@@ -13,10 +12,10 @@ int dtor_list(List *list);
 
 int insert_list(List *list, int index, void *val);
 int append_list(List *list, void *val);
-void *delete_list(List *list int index);
+void *delete_list(List *list, int index);
 int set_list(List *list, int index, void *val);
 void *access_list(List *list, int index);
-List *add_list(List *list, List *list);
+List *add_list(List *lhs, List *rhs);
 
 int _grow_list(List *list);
 

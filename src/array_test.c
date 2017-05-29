@@ -13,7 +13,7 @@ static int array_test_setup(void **state) {
 static int array_test_teardown(void **state) {
 	if (state) {
 		free(*state);
-		state = NULL;
+		state = 0;
 	}
 	return 0;
 }

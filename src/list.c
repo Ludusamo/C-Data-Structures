@@ -20,16 +20,24 @@ int dtor_list(List *list) {
 	return 1;
 }
 
+int insert_list(List *list, int index, void *val) {
+	if (index > list->length || index < 0) return 0;
+	if (!list->array || list->array->length < list->length + 1)
+		_grow_list(list);
+	for (size_t i = list->length; i > index; --i) {
+		set_array(list->array, i, access_array(list->array, i - 1));
+	}
+	set_array(list->array, index, val);
+	list->length++;
+	return 1;
+}
+
 int append_list(List *list, void *val) {
 	if (!list->array || list->array->length <= list->length) {
 		_grow_list(list);
 	} 
 	set_array(list->array, (list->length)++, val);
 	return 1;
-}
-
-size_t size_list(List *list) {
-	return list->array->length;
 }
 
 int reserve_space_list(List *list, size_t len) {
@@ -50,5 +58,5 @@ int reserve_space_list(List *list, size_t len) {
 }
 
 int _grow_list(List *list) {
-	return reserve_space_list(list, list->array->length * 2);
+	return reserve_space_list(list, list->array ? list->array->length * 2 : 1);
 }

@@ -11,7 +11,7 @@ typedef struct {
 int ctor_list(List *list);
 int dtor_list(List *list);
 
-int set_list(List *list, int index, void *val);
+int insert_list(List *list, int index, void *val);
 int append_list(List *list, void *val);
 void *delete_list(List *list, int index);
 int set_list(List *list, int index, void *val);

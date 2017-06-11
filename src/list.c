@@ -32,13 +32,14 @@ size_t size_list(List *list) {
 	return list->array->length;
 }
 
-int _grow_list(List *list) {
+int reserve_space_list(List *list, size_t len) {
+	if (list->array && list->array->length >= len) return 1;
 	if (!list->array) {
 		list->array = malloc(sizeof(Array));
 		ctor_array(list->array, 1);
 	}
 	Array *new_array = malloc(sizeof(Array));
-	ctor_array(new_array, list->array->length * 2);
+	ctor_array(new_array, len);
 	for (size_t i = 0; i < list->array->length; i++) {
 		set_array(new_array, i, access_array(list->array, i));
 	}
@@ -46,4 +47,8 @@ int _grow_list(List *list) {
 	free(list->array);
 	list->array = new_array;
 	return 1;
+}
+
+int _grow_list(List *list) {
+	return reserve_space_list(list, list->array->length * 2);
 }

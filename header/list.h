@@ -5,6 +5,7 @@
 
 typedef struct {
 	Array *array;
+	int length;
 } List;
 
 int ctor_list(List *list);

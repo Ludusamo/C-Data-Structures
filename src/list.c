@@ -12,9 +12,7 @@ int ctor_list(List *list) {
 int dtor_list(List *list) {
 	if (list) {
 		if (list->array) {
-			dtor_array(list->array);
-			free(list->array);
-			list->array = 0;
+			clear_list(list);
 		}
 	}
 	return 1;
@@ -46,6 +44,13 @@ int clear_list(List *list) {
 	free(list->array);
 	list->array = 0;
 	list->length = 0;
+	return 1;
+}
+
+int resize_list(List *list, size_t len, void *value) {
+	while (!list->array || list->array->length < len) _grow_list(list);
+	while (list->length < len) append_list(list, value);
+	list->length = len;
 	return 1;
 }
 

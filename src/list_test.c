@@ -58,6 +58,15 @@ void append_list_test(void **state) {
 	}
 }
 
+void resize_list_test(void **state) {
+	List *list = *state;
+	clear_list(list);
+	int val = 17;
+	resize_list(list, 100, &val);
+	assert_int_equal(100, list->length);
+	assert_int_equal(17, *((int *) access_array(list->array, 25)));
+}
+
 void reserve_space_list_test(void **state) {
 	List *list = *state;
 	if (list->array) {
@@ -89,6 +98,7 @@ int run_list_tests() {
 	const struct CMUnitTest tests[] = {
 		cmocka_unit_test(ctor_list_test),
 		cmocka_unit_test(insert_list_test),
+		cmocka_unit_test(resize_list_test),
 		cmocka_unit_test(reserve_space_list_test),
 		cmocka_unit_test(append_list_test),
 		cmocka_unit_test(clear_list_test),

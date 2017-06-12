@@ -17,6 +17,7 @@ void dtor_list_test(void **state);
 
 void insert_list_test(void **state);
 void append_list_test(void **state);
+void resize_list_test(void **state);
 void reserve_space_list_test(void **state);
 void clear_list_test(void **state);
 

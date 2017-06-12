@@ -16,7 +16,7 @@ int dtor_list(List *list) {
 			free(list->array);
 			list->array = 0;
 		}
-	}	
+	}
 	return 1;
 }
 
@@ -35,8 +35,17 @@ int insert_list(List *list, int index, void *val) {
 int append_list(List *list, void *val) {
 	if (!list->array || list->array->length <= list->length) {
 		_grow_list(list);
-	} 
+	}
 	set_array(list->array, (list->length)++, val);
+	return 1;
+}
+
+int clear_list(List *list) {
+	if (!list) return 0;
+	dtor_array(list->array);
+	free(list->array);
+	list->array = 0;
+	list->length = 0;
 	return 1;
 }
 

@@ -70,12 +70,28 @@ void reserve_space_list_test(void **state) {
 	assert_int_equal(list->array->length, 10);
 }
 
+void clear_list_test(void **state) {
+	List *list = *state;
+	list->length = 0;
+	reserve_space_list(list, 10000);
+	int arr[10];
+	for (int i = 0; i < 10; i++) {
+		arr[i] = i;
+		append_list(list, &arr[i]);
+	}
+	assert_int_equal(list->length, 10);
+	clear_list(list);
+	assert_int_equal(list->length, 0);
+	assert_null(list->array);
+}
+
 int run_list_tests() {
 	const struct CMUnitTest tests[] = {
 		cmocka_unit_test(ctor_list_test),
 		cmocka_unit_test(insert_list_test),
 		cmocka_unit_test(reserve_space_list_test),
 		cmocka_unit_test(append_list_test),
+		cmocka_unit_test(clear_list_test),
 		cmocka_unit_test(dtor_list_test)
 	};
 	return cmocka_run_group_tests_name("List Tests", tests, list_test_setup, list_test_teardown);

@@ -15,6 +15,11 @@ int list_test_teardown(void **state);
 void ctor_list_test(void **state);
 void dtor_list_test(void **state);
 
+void insert_list_test(void **state);
+void append_list_test(void **state);
+void reserve_space_list_test(void **state);
+void clear_list_test(void **state);
+
 int run_list_tests();
 
 #endif // LIST_TEST_H

@@ -118,9 +118,32 @@ void access_list_test(void **state) {
 	assert(!access_list(list, 11));
 }
 
+void add_list_test(void **state) {
+	List l1, l2;
+	ctor_list(&l1);
+	ctor_list(&l2);
+	int a[10];
+	for (int i = 0; i < 10; i++) {
+		a[i] = i;
+		append_list(&l1, &a[i]);
+	}
+	int b[10];
+	for (int i = 10; i < 20; i++) {
+		b[i - 10] = i;
+		append_list(&l2, &b[i - 10]);
+	}
+	List *l3 = add_list(&l1, &l2);
+	for (int i = 0; i < 10; i++) {
+		assert(*(int *) access_list(l3, i) == a[i]);
+	}
+	for (int i = 10; i < 20; i++) {
+		assert(*(int *) access_list(l3, i) == b[i - 10]);
+	}
+}
+
 int run_list_tests() {
 	Array tests;
-	ctor_array(&tests, 7);
+	ctor_array(&tests, 9);
 	set_array(&tests, 0, ctor_list_test);
 	set_array(&tests, 1, insert_list_test);
 	set_array(&tests, 2, resize_list_test);
@@ -129,6 +152,7 @@ int run_list_tests() {
 	set_array(&tests, 5, clear_list_test);
 	set_array(&tests, 6, set_list_test);
 	set_array(&tests, 7, access_list_test);
+	set_array(&tests, 7, add_list_test);
 	set_array(&tests, 8, dtor_list_test);
 	return run_tests("List Tests", &tests, list_test_setup, list_test_teardown);
 }

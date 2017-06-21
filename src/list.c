@@ -55,6 +55,18 @@ void *access_list(List *list, int index) {
 	return access_array(list->array, index);
 }
 
+List *add_list(List *lhs, List *rhs) {
+	List *new_list = malloc(sizeof(List));
+	ctor_list(new_list);
+	for (int i = 0; i < lhs->length; i++) {
+		append_list(new_list, access_list(lhs, i));
+	}
+	for (int i = 0; i < rhs->length; i++) {
+		append_list(new_list, access_list(rhs, i));
+	}
+	return new_list;
+}
+
 int resize_list(List *list, size_t len, void *value) {
 	while (!list->array || list->array->length < len) _grow_list(list);
 	while (list->length < len) append_list(list, value);

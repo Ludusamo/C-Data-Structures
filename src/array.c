@@ -58,7 +58,7 @@ int done_iter_array(const Iter *self) {
 }
 
 void *val_iter_array(const Iter *self) {
-	return access_array((Array*) self->data[0],*((int*) self->data[1]));
+	return access_array((Array*) self->data[0], *((int*) self->data[1]));
 }
 
 int iter_array(Iter *iter, Array *array) {
@@ -67,7 +67,7 @@ int iter_array(Iter *iter, Array *array) {
 	iter->data[1] = malloc(sizeof(int));
 	iter->data[2] = malloc(sizeof(int));
 	*((int*)(iter->data[1])) = 0;
-	*((int*)(iter->data[2])) = array->length;;
+	*((int*)(iter->data[2])) = array->length;
 	iter->next = &next_iter_array;
 	iter->done = &done_iter_array;
 	iter->val = &val_iter_array;

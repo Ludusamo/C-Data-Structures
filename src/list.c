@@ -51,7 +51,7 @@ int set_list(List *list, int index, void *val) {
 	return set_array(list->array, index, val);
 }
 
-void *access_list(List *list, int index) {
+void *access_list(const List *list, int index) {
 	return access_array(list->array, index);
 }
 
@@ -93,4 +93,35 @@ int reserve_space_list(List *list, size_t len) {
 
 int _grow_list(List *list) {
 	return reserve_space_list(list, list->array ? list->array->length * 2 : 1);
+}
+
+void next_iter_list(Iter *self) {
+	*(int*) self->data[1] += 1;
+}
+
+int done_iter_list(const Iter *self) {
+	return *(int*) self->data[1] < *(int*) self->data[2];
+}
+
+void *val_iter_list(const Iter *self) {
+	return access_list((List *) self->data[0], *(int*) self->data[1]);
+}
+
+int iter_list(Iter *iter, List *list) {
+	iter->data = calloc(sizeof(void*), 3);
+	iter->data[0] = list;
+	iter->data[1] = malloc(sizeof(int));
+	iter->data[2] = malloc(sizeof(int));
+	*(int*)iter->data[1] = 0;
+	*(int*)iter->data[2] = list->length;
+	iter->next = &next_iter_list;
+	iter->done = &done_iter_list;
+	iter->val = &val_iter_list;
+	return 1;
+}
+
+void destroy_iter_list(Iter *iter) {
+	free(iter->data[1]);
+	free(iter->data[2]);
+	free(iter->data);
 }

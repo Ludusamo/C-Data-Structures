@@ -141,9 +141,27 @@ void add_list_test(void **state) {
 	}
 }
 
+void iter_list_test(void **state) {
+	List l1;
+	ctor_list(&l1);
+	int a[10];
+	for (int i = 0; i < 10; i++) {
+		a[i] = i;
+		append_list(&l1, &a[i]);
+	}
+	Iter iter;
+	iter_list(&iter, &l1);
+	Iter i;
+	int should_be = 0;
+	foreach(i, iter) {
+		assert(should_be++ == *(int*) i.val(&i));
+	}
+	destroy_iter_list(&iter);
+}
+
 int run_list_tests() {
 	Array tests;
-	ctor_array(&tests, 9);
+	ctor_array(&tests, 10);
 	set_array(&tests, 0, ctor_list_test);
 	set_array(&tests, 1, insert_list_test);
 	set_array(&tests, 2, resize_list_test);
@@ -153,6 +171,7 @@ int run_list_tests() {
 	set_array(&tests, 6, set_list_test);
 	set_array(&tests, 7, access_list_test);
 	set_array(&tests, 7, add_list_test);
-	set_array(&tests, 8, dtor_list_test);
+	set_array(&tests, 8, iter_list_test);
+	set_array(&tests, 9, dtor_list_test);
 	return run_tests("List Tests", &tests, list_test_setup, list_test_teardown);
 }

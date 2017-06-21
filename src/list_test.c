@@ -20,12 +20,12 @@ int list_test_teardown(void **state) {
 
 void ctor_list_test(void **state) {
 	ctor_list(*state);
-	assert_non_null(*state);
+	assert(*state != 0);
 }
 
 void dtor_list_test(void **state) {
 	dtor_list(*state);
-	assert_null(((List*) (*state))->array);
+	assert(((List*) (*state))->array == 0);
 }
 
 void insert_list_test(void **state) {
@@ -38,11 +38,11 @@ void insert_list_test(void **state) {
 	int insert_item = 25;
 	insert_list(list, 0, &insert_item);
 	int should_be = 0;
-	assert_int_equal(insert_item, *(int *)access_array(list->array, 0));
+	assert(insert_item == *(int *)access_array(list->array, 0));
 	for (int i = 1; i < list->length; i++) {
-		assert_int_equal(should_be++ * 7, *(int *)access_array(list->array, i));
+		assert(should_be++ * 7 == *(int *)access_array(list->array, i));
 	}
-	assert_int_equal(0, insert_list(list, 400, &insert_item));
+	assert(0 == insert_list(list, 400, &insert_item));
 }
 
 void append_list_test(void **state) {
@@ -54,7 +54,7 @@ void append_list_test(void **state) {
 	}
 	int should_be = 0;
 	for (int i = 0; i < list->length; i++) {
-		assert_int_equal(should_be++ * 7, *(int *)access_array(list->array, i));
+		assert(should_be++ * 7 == *(int *)access_array(list->array, i));
 	}
 }
 
@@ -63,8 +63,8 @@ void resize_list_test(void **state) {
 	clear_list(list);
 	int val = 17;
 	resize_list(list, 100, &val);
-	assert_int_equal(100, list->length);
-	assert_int_equal(17, *((int *) access_array(list->array, 25)));
+	assert(100 == list->length);
+	assert(17 == *((int *) access_array(list->array, 25)));
 }
 
 void reserve_space_list_test(void **state) {
@@ -76,7 +76,7 @@ void reserve_space_list_test(void **state) {
 		list->length = 0;
 	}
 	reserve_space_list(list, 10);
-	assert_int_equal(list->array->length, 10);
+	assert(list->array->length == 10);
 }
 
 void clear_list_test(void **state) {
@@ -88,21 +88,21 @@ void clear_list_test(void **state) {
 		arr[i] = i;
 		append_list(list, &arr[i]);
 	}
-	assert_int_equal(list->length, 10);
+	assert(list->length == 10);
 	clear_list(list);
-	assert_int_equal(list->length, 0);
-	assert_null(list->array);
+	assert(list->length == 0);
+	assert(list->array == 0);
 }
 
 int run_list_tests() {
-	const struct CMUnitTest tests[] = {
-		cmocka_unit_test(ctor_list_test),
-		cmocka_unit_test(insert_list_test),
-		cmocka_unit_test(resize_list_test),
-		cmocka_unit_test(reserve_space_list_test),
-		cmocka_unit_test(append_list_test),
-		cmocka_unit_test(clear_list_test),
-		cmocka_unit_test(dtor_list_test)
-	};
-	return cmocka_run_group_tests_name("List Tests", tests, list_test_setup, list_test_teardown);
+	Array tests;
+	ctor_array(&tests, 7);
+	set_array(&tests, 0, ctor_list_test);
+	set_array(&tests, 1, insert_list_test);
+	set_array(&tests, 2, resize_list_test);
+	set_array(&tests, 3, reserve_space_list_test);
+	set_array(&tests, 4, append_list_test);
+	set_array(&tests, 5, clear_list_test);
+	set_array(&tests, 6, dtor_list_test);
+	return run_tests("List Tests", &tests, list_test_setup, list_test_teardown);
 }

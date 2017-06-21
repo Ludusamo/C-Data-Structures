@@ -7,7 +7,8 @@
 #include <stdlib.h>
 
 #include "list.h"
-#include <cmocka.h>
+#include "test.h"
+#include "assert.h"
 
 int list_test_setup(void **state);
 int list_test_teardown(void **state);

@@ -1,3 +1,4 @@
+#include "array.h"
 #include "array_test.h"
 #include "iter_test.h"
 #include "list_test.h"

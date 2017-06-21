@@ -20,7 +20,7 @@ int dtor_array(Array *array) {
 }
 
 int set_array(Array *array, int index, void *val) {
-	if (!array || !(array->data)) return 0;
+	if (!array || !(array->data) || index >= array->length) return 0;
 	array->data[index] = val;
 	return 1;
 }

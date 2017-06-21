@@ -94,6 +94,18 @@ void clear_list_test(void **state) {
 	assert(list->array == 0);
 }
 
+void set_list_test(void **state) {
+	List *list = *state;
+	list->length = 0;
+	reserve_space_list(list, 10);
+	int a = 10;
+	set_list(list, 0, &a);
+	assert(*((int*)list->array->data[0]) == a);
+	set_list(list, 2, &a);
+	assert(*((int*)list->array->data[2]) == a);
+	assert(!set_list(list, 11, &a));
+}
+
 int run_list_tests() {
 	Array tests;
 	ctor_array(&tests, 7);
@@ -103,6 +115,7 @@ int run_list_tests() {
 	set_array(&tests, 3, reserve_space_list_test);
 	set_array(&tests, 4, append_list_test);
 	set_array(&tests, 5, clear_list_test);
-	set_array(&tests, 6, dtor_list_test);
+	set_array(&tests, 6, set_list_test);
+	set_array(&tests, 7, dtor_list_test);
 	return run_tests("List Tests", &tests, list_test_setup, list_test_teardown);
 }

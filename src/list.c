@@ -51,6 +51,10 @@ int set_list(List *list, int index, void *val) {
 	return set_array(list->array, index, val);
 }
 
+void *access_list(List *list, int index) {
+	return access_array(list->array, index);
+}
+
 int resize_list(List *list, size_t len, void *value) {
 	while (!list->array || list->array->length < len) _grow_list(list);
 	while (list->length < len) append_list(list, value);

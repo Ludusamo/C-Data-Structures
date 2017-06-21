@@ -20,6 +20,7 @@ void insert_list_test(void **state);
 void append_list_test(void **state);
 void clear_list_test(void **state);
 void set_list_test(void **state);
+void access_list_test(void **state);
 void resize_list_test(void **state);
 void reserve_space_list_test(void **state);
 

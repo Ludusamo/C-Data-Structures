@@ -26,7 +26,7 @@ int set_array(Array *array, int index, void *val) {
 }
 
 void *access_array(const Array *array, int index) {
-	if (!array || !(array->data)) return 0;
+	if (!array || !(array->data) || index >= array->length) return 0;
 	return array->data[index];
 }
 

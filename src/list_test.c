@@ -76,6 +76,20 @@ void append_list_test(void **state) {
 	}
 }
 
+void pop_list_test(void **state) {
+	List *list = ((List *) *state);
+	clear_list(list);
+	assert(pop_list(list) == 0);
+	int arr[32];
+	for (int i = 0; i < 32; i++) {
+		arr[i] = i * 7;
+		append_list(list, &arr[i]);
+	}
+	int popped = *(int*) pop_list(list);
+	assert(popped == 7 * 31);
+	assert(list->length == 31);
+}
+
 void resize_list_test(void **state) {
 	List *list = *state;
 	clear_list(list);
@@ -179,18 +193,19 @@ void iter_list_test(void **state) {
 
 int run_list_tests() {
 	Array tests;
-	ctor_array(&tests, 10);
+	ctor_array(&tests, 13);
 	set_array(&tests, 0, ctor_list_test);
 	set_array(&tests, 1, insert_list_test);
 	set_array(&tests, 2, delete_list_test);
 	set_array(&tests, 3, resize_list_test);
 	set_array(&tests, 4, reserve_space_list_test);
 	set_array(&tests, 5, append_list_test);
-	set_array(&tests, 6, clear_list_test);
-	set_array(&tests, 7, set_list_test);
-	set_array(&tests, 8, access_list_test);
-	set_array(&tests, 9, add_list_test);
-	set_array(&tests, 9, iter_list_test);
-	set_array(&tests, 10, dtor_list_test);
+	set_array(&tests, 6, pop_list_test);
+	set_array(&tests, 7, clear_list_test);
+	set_array(&tests, 8, set_list_test);
+	set_array(&tests, 9, access_list_test);
+	set_array(&tests, 10, add_list_test);
+	set_array(&tests, 11, iter_list_test);
+	set_array(&tests, 12, dtor_list_test);
 	return run_tests("List Tests", &tests, list_test_setup, list_test_teardown);
 }

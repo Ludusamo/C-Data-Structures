@@ -13,7 +13,7 @@ void *val_test(const Iter *self) {
 	return &((int*) self->data[0])[*((int*) self->data[1])];
 }
 
-static int iter_test_setup(void **state) {
+int iter_test_setup(void **state) {
 	int *arr = calloc(sizeof(int), 10);
 	for (int i = 0; i < 10; i++) {
 		arr[i] = i;
@@ -40,7 +40,7 @@ static int iter_test_setup(void **state) {
 	return 0;
 }
 
-static int iter_test_teardown(void **state) {
+int iter_test_teardown(void **state) {
 	if (state) {
 		Iter_Test_Container *itc = *state;
 		Iter *iter = (Iter *)itc->iter;
@@ -55,20 +55,20 @@ static int iter_test_teardown(void **state) {
 	return 0;
 }
 
-static void iter_test(void **state) {
+void iter_test(void **state) {
 	Iter_Test_Container *itc = *state;
 	Iter *iter = ((Iter *) itc->iter);
 	int should_be = 0;
 
 	for (Iter *i = iter; i->done(i); i->next(i)) {
-		assert_int_equal(should_be++, *((int*)i->val(i)));
+		assert(should_be++ == *((int*)i->val(i)));
 	}
 }
 
 int run_iter_tests() {
-	const struct CMUnitTest tests[] = {
-		cmocka_unit_test(iter_test)
-	};
+	Array tests;
+	ctor_array(&tests, 1);
+	set_array(&tests, 0, iter_test);
 
-	return cmocka_run_group_tests_name("Iter Tests", tests, iter_test_setup, iter_test_teardown);
+	return run_tests("Iter Tests", &tests, iter_test_setup, iter_test_teardown);
 }

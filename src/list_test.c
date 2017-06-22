@@ -141,7 +141,7 @@ void set_list_test(void **state) {
 void access_list_test(void **state) {
 	List *list = *state;
 	list->length = 0;
-	reserve_space_list(list, 10);
+	resize_list(list, 10, 0);
 	int a = 10;
 	set_list(list, 0, &a);
 	assert(*(int *) access_list(list, 0) == a);

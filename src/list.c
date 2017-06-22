@@ -40,7 +40,9 @@ int append_list(List *list, void *val) {
 
 void *pop_list(List *list) {
 	if (!list || list->length == 0) return 0;
-	return access_list(list, --list->length);
+	void *val = access_list(list, list->length - 1);
+	list->length--;
+	return val;
 }
 
 int delete_list(List *list, int index) {
@@ -66,7 +68,7 @@ int set_list(List *list, int index, void *val) {
 }
 
 void *access_list(const List *list, int index) {
-	if (!list) return 0;
+	if (!list || index >= list->length) return 0;
 	return access_array(list->array, index);
 }
 

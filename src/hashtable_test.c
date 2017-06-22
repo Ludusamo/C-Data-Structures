@@ -63,6 +63,19 @@ void set_hashtable_test(void **state) {
 		val++;
 	}
 	destroy_iter_list(&iter);
+	int a = 17;
+	set_hashtable(&h, access_list(&keys, 0), &a);
+	Keyval *l1 = access_list(&h.a, hash1("Test") % h.a.length);
+	Keyval *l2 = access_list(&h.b, hash2("Test") % h.b.length);
+	if (l1 && l2) {
+		assert(l1->key == "Test" ^ l2->key == "Test");
+	} else if (l1) {
+		assert(l1->key == "Test" &&
+			*(int*) l1->val == a);
+	} else if (l2) {
+		assert(l2->key == "Test" &&
+			*(int*) l2->val == a);
+	}
 }
 
 int run_hashtable_tests() {

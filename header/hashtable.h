@@ -18,8 +18,8 @@ typedef struct {
 int ctor_hashtable(Hashtable *h);
 int dtor_hashtable(Hashtable *h);
 
-Keyval *access_hashtable(const Hashtable *h, const char *key);
 int set_hashtable(Hashtable *h, const char *key, void *val);
+void *access_hashtable(const Hashtable *h, const char *key);
 int delete_hashtable(Hashtable *h, const char *key);
 int clear_hashtable(Hashtable *h);
 

@@ -24,7 +24,7 @@ int set_hashtable(Hashtable *h, const char *key, void *val) {
 				uint64_t hash = hash1(pair->key) % h->a.length;
 				Keyval *cur_pair = access_list(&h->a, hash);
 				set_list(&h->a, hash, pair);
-				if (cur_pair) {
+				if (cur_pair && cur_pair->key != pair->key) {
 					pair = cur_pair;
 					cur = !cur;
 				} else {
@@ -34,7 +34,7 @@ int set_hashtable(Hashtable *h, const char *key, void *val) {
 				uint64_t hash = hash2(pair->key) % h->b.length;
 				Keyval *cur_pair = access_list(&h->b, hash);
 				set_list(&h->b, hash, pair);
-				if (cur_pair) {
+				if (cur_pair && cur_pair->key != pair->key) {
 					pair = cur_pair;
 					cur = !cur;
 				} else {

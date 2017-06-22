@@ -5,7 +5,7 @@ Set of Data Structures implemented in C.
 Data Structures that are (or going to be) implemented in this repository:
 
 - [x] Array
-- [ ] Dynamic Arrays (List)
+- [x] Dynamic Arrays (List)
 - [ ] Tuple
 - [ ] Stack
 - [ ] Queue/Deque

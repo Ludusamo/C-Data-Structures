@@ -17,7 +17,9 @@ void ctor_list_test(void **state);
 void dtor_list_test(void **state);
 
 void insert_list_test(void **state);
+void delete_list_test(void **state);
 void append_list_test(void **state);
+void pop_list_test(void **state);
 void clear_list_test(void **state);
 void set_list_test(void **state);
 void access_list_test(void **state);

@@ -12,7 +12,9 @@ int ctor_list(List *list);
 int dtor_list(List *list);
 
 int insert_list(List *list, int index, void *val);
+int delete_list(List *list, int index);
 int append_list(List *list, void *val);
+void *pop_list(List *list);
 int clear_list(List *list);
 int set_list(List *list, int index, void *val);
 void *access_list(const List *list, int index);

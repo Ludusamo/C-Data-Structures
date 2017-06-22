@@ -38,6 +38,15 @@ int append_list(List *list, void *val) {
 	return 1;
 }
 
+int delete_list(List *list, int index) {
+	if (!list || list->length < index || index < 0) return 0;
+	for (size_t i = index; i < list->length - 1; i++) {
+		set_list(list, i, access_list(list, i + 1));
+	}
+	list->length -= 1;
+	return 1;
+}
+
 int clear_list(List *list) {
 	if (!list) return 0;
 	dtor_array(list->array);

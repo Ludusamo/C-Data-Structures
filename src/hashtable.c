@@ -55,10 +55,10 @@ int set_hashtable(Hashtable *h, const char *key, void *val) {
 void *access_hashtable(const Hashtable *h, const char *key) {
 	uint64_t h1 = hash1(key) % h->a.length;
 	Keyval *pair = access_list(&h->a, h1);
-	if (pair->key == key) return pair->val;
+	if (pair && pair->key == key) return pair->val;
 	uint64_t h2 = hash2(key) % h->b.length;
 	pair = access_list(&h->b, h2);
-	if (pair->key == key) return pair->val;
+	if (pair && pair->key == key) return pair->val;
 	return 0;
 }
 
@@ -84,6 +84,24 @@ int _rehash(Hashtable *h) {
 	dtor_list(&keyvals);
 	h->capacity *= 2;
 	return 1;
+}
+
+int delete_hashtable(Hashtable *h, const char *key) {
+	uint64_t h1 = hash1(key) % h->a.length;
+	Keyval *pair = access_list(&h->a, h1);
+	if (pair->key == key) {
+		set_list(&h->a, h1, 0);
+		free(pair);
+		return 1;
+	}
+	uint64_t h2 = hash2(key) % h->b.length;
+	pair = access_list(&h->b, h2);
+	if (pair->key == key) {
+		set_list(&h->b, h2, 0);
+		free(pair);
+		return 1;
+	}
+	return 0;
 }
 
 uint64_t hash1(const char *str) {

@@ -9,6 +9,7 @@ void dtor_hashtable_test(void **state);
 
 void set_hashtable_test(void **state);
 void access_hashtable_test(void **state);
+void delete_hashtable_test(void **state);
 
 int run_hashtable_tests();
 

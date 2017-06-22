@@ -76,14 +76,45 @@ void set_hashtable_test(void **state) {
 		assert(l2->key == "Test" &&
 			*(int*) l2->val == a);
 	}
+	dtor_list(&keys);
+	dtor_hashtable(&h);
+}
+
+void access_hashtable_test(void **state) {
+	Hashtable h;
+	List keys;
+	ctor_list(&keys);
+	append_list(&keys, "Test");
+	append_list(&keys, "Test2");
+	append_list(&keys, "Test3");
+	append_list(&keys, "Test4");
+	append_list(&keys, "Test5");
+	append_list(&keys, "Test6");
+	append_list(&keys, "Test7");
+	append_list(&keys, "Test8");
+	append_list(&keys, "Test9");
+	append_list(&keys, "Test10");
+	ctor_hashtable(&h);
+	int arr[10];
+	for (int i = 0; i < 10; i++) {
+		arr[i] = i;
+		set_hashtable(&h, access_list(&keys, i), &arr[i]);
+	}
+	for (int i = 0; i < 10; i++) {
+		assert(*(int*)access_hashtable(&h, access_list(&keys, i)) == arr[i]);
+	}
+	assert(!access_hashtable(&h, "Random String"));
+	dtor_list(&keys);
+	dtor_hashtable(&h);
 }
 
 int run_hashtable_tests() {
 	Array tests;
-	ctor_array(&tests, 3);
+	ctor_array(&tests, 4);
 	set_array(&tests, 0, ctor_hashtable_test);
 	set_array(&tests, 1, set_hashtable_test);
-	set_array(&tests, 2, dtor_hashtable_test);
+	set_array(&tests, 2, access_hashtable_test);
+	set_array(&tests, 3, dtor_hashtable_test);
 
 	return run_tests("Hashtable Tests",
 		&tests,

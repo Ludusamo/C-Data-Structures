@@ -105,5 +105,7 @@ int run_array_tests() {
 	set_array(&tests, 4, add_array_test);
 	set_array(&tests, 5, dtor_array_test);
 
-	return run_tests("Array Tests", &tests, array_test_setup, array_test_teardown);
+	int ret = run_tests("Array Tests", &tests, array_test_setup, array_test_teardown);
+	dtor_array(&tests);
+	return ret;
 }

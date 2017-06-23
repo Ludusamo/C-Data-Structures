@@ -91,17 +91,15 @@ int resize_list(List *list, size_t len, void *value) {
 
 int reserve_space_list(List *list, size_t len) {
 	if (list->array && list->array->length >= len) return 1;
-	if (!list->array) {
-		list->array = malloc(sizeof(Array));
-		ctor_array(list->array, 1);
-	}
 	Array *new_array = malloc(sizeof(Array));
 	ctor_array(new_array, len);
-	for (size_t i = 0; i < list->array->length; i++) {
-		set_array(new_array, i, access_array(list->array, i));
+	if (list->array) {
+		for (size_t i = 0; i < list->array->length; i++) {
+			set_array(new_array, i, access_array(list->array, i));
+		}
+		dtor_array(list->array);
+		free(list->array);
 	}
-	dtor_array(list->array);
-	free(list->array);
 	list->array = new_array;
 	return 1;
 }

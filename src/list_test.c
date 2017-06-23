@@ -171,6 +171,10 @@ void add_list_test(void **state) {
 	for (int i = 10; i < 20; i++) {
 		assert(*(int *) access_list(l3, i) == b[i - 10]);
 	}
+	dtor_list(&l1);
+	dtor_list(&l2);
+	dtor_list(l3);
+	free(l3);
 }
 
 void iter_list_test(void **state) {
@@ -189,6 +193,7 @@ void iter_list_test(void **state) {
 		assert(should_be++ == *(int*) i.val(&i));
 	}
 	destroy_iter_list(&iter);
+	dtor_list(&l1);
 }
 
 int run_list_tests() {
@@ -207,5 +212,7 @@ int run_list_tests() {
 	set_array(&tests, 10, add_list_test);
 	set_array(&tests, 11, iter_list_test);
 	set_array(&tests, 12, dtor_list_test);
-	return run_tests("List Tests", &tests, list_test_setup, list_test_teardown);
+	int ret = run_tests("List Tests", &tests, list_test_setup, list_test_teardown);
+	dtor_array(&tests);
+	return ret;
 }

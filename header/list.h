@@ -4,7 +4,7 @@
 #include "array.h"
 
 typedef struct {
-	Array *array;
+	Array array;
 	size_t length;
 } List;
 

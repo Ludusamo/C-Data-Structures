@@ -25,7 +25,7 @@ void ctor_list_test(void **state) {
 
 void dtor_list_test(void **state) {
 	dtor_list(*state);
-	assert(((List*) (*state))->array == 0);
+	assert(((List*) (*state))->array.data == 0);
 }
 
 void insert_list_test(void **state) {
@@ -38,9 +38,9 @@ void insert_list_test(void **state) {
 	int insert_item = 25;
 	insert_list(list, 0, &insert_item);
 	int should_be = 0;
-	assert(insert_item == *(int *)access_array(list->array, 0));
+	assert(insert_item == *(int *)access_array(&list->array, 0));
 	for (int i = 1; i < list->length; i++) {
-		assert(should_be++ * 7 == *(int *)access_array(list->array, i));
+		assert(should_be++ * 7 == *(int *)access_array(&list->array, i));
 	}
 	assert(0 == insert_list(list, 400, &insert_item));
 }
@@ -58,7 +58,7 @@ void delete_list_test(void **state) {
 	delete_list(list, 5);
 	int should_be = 0;
 	for (int i = 0; i < list->length; i++) {
-		assert(should_be++ * 7 == *(int *)access_array(list->array, i));
+		assert(should_be++ * 7 == *(int *)access_array(&list->array, i));
 	}
 	assert(0 == delete_list(list, 400));
 }
@@ -72,7 +72,7 @@ void append_list_test(void **state) {
 	}
 	int should_be = 0;
 	for (int i = 0; i < list->length; i++) {
-		assert(should_be++ * 7 == *(int *)access_array(list->array, i));
+		assert(should_be++ * 7 == *(int *)access_array(&list->array, i));
 	}
 }
 
@@ -96,19 +96,15 @@ void resize_list_test(void **state) {
 	int val = 17;
 	resize_list(list, 100, &val);
 	assert(100 == list->length);
-	assert(17 == *((int *) access_array(list->array, 25)));
+	assert(17 == *((int *) access_array(&list->array, 25)));
 }
 
 void reserve_space_list_test(void **state) {
 	List *list = *state;
-	if (list->array) {
-		dtor_array(list->array);
-		free(list->array);
-		list->array = 0;
-		list->length = 0;
-	}
+	dtor_array(&list->array);
+	list->length = 0;
 	reserve_space_list(list, 10);
-	assert(list->array->length == 10);
+	assert(list->array.length == 10);
 }
 
 void clear_list_test(void **state) {
@@ -123,7 +119,7 @@ void clear_list_test(void **state) {
 	assert(list->length == 10);
 	clear_list(list);
 	assert(list->length == 0);
-	assert(list->array == 0);
+	assert(list->array.data == 0);
 }
 
 void set_list_test(void **state) {
@@ -132,9 +128,9 @@ void set_list_test(void **state) {
 	reserve_space_list(list, 10);
 	int a = 10;
 	set_list(list, 0, &a);
-	assert(*((int*)list->array->data[0]) == a);
+	assert(*((int*)list->array.data[0]) == a);
 	set_list(list, 2, &a);
-	assert(*((int*)list->array->data[2]) == a);
+	assert(*((int*)list->array.data[2]) == a);
 	assert(!set_list(list, 11, &a));
 }
 

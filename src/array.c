@@ -1,9 +1,6 @@
 #include "array.h"
 
 int ctor_array(Array *array, size_t len) {
-	if (!array) {
-		array = malloc(sizeof(Array));
-	}
 	array->data = calloc(sizeof(void*), len);
 	array->length = len;
 	return 1;
@@ -15,6 +12,7 @@ int dtor_array(Array *array) {
 			free(array->data);
 			array->data = 0;
 		}
+		array->length = 0;
 	}
 	return 1;
 }

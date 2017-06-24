@@ -8,14 +8,7 @@ int ctor_hashtable(Hashtable *h) {
 }
 
 int dtor_hashtable(Hashtable *h) {
-	for (size_t i = 0; i < h->capacity / 2; i++) {
-		Keyval *a = access_list(&h->a, i);
-		if (a) free(a);
-		Keyval *b = access_list(&h->b, i);
-		if (b) free(b);
-	}
-	dtor_list(&h->a);
-	dtor_list(&h->b);
+	clear_hashtable(h);
 	return 1;
 }
 
@@ -111,6 +104,18 @@ int delete_hashtable(Hashtable *h, const char *key) {
 		return 1;
 	}
 	return 0;
+}
+
+int clear_hashtable(Hashtable *h) {
+	for (size_t i = 0; i < h->capacity / 2; i++) {
+		Keyval *a = access_list(&h->a, i);
+		if (a) free(a);
+		Keyval *b = access_list(&h->b, i);
+		if (b) free(b);
+	}
+	clear_list(&h->a);
+	clear_list(&h->b);
+	return 1;
 }
 
 uint64_t hash1(const char *str) {

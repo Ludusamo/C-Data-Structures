@@ -24,6 +24,8 @@ int delete_hashtable(Hashtable *h, const char *key);
 int clear_hashtable(Hashtable *h);
 
 int _rehash(Hashtable *h);
+Keyval *_aux_set_hashtable(Hashtable *h, Keyval *new_pair,
+                           List *list, uint64_t hash);
 
 uint64_t hash1(const char *str);
 uint64_t hash2(const char *str);

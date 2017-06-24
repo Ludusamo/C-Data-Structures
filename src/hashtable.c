@@ -24,34 +24,41 @@ int set_hashtable(Hashtable *h, const char *key, void *val) {
 	Keyval *pair = malloc(sizeof(Keyval));
 	pair->key = key;
 	pair->val = val;
-	while (1) {
-		for (size_t i = 0; i < h->a.length; i++) {
-			if (cur) {
-				uint64_t hash = hash1(pair->key) % h->a.length;
-				Keyval *cur_pair = access_list(&h->a, hash);
-				set_list(&h->a, hash, pair);
-				if (cur_pair && cur_pair->key != pair->key) {
-					pair = cur_pair;
-					cur = !cur;
-				} else {
-					if (cur_pair) free(cur_pair);
-					return 1;
-				}
-			} else {
-				uint64_t hash = hash2(pair->key) % h->b.length;
-				Keyval *cur_pair = access_list(&h->b, hash);
-				set_list(&h->b, hash, pair);
-				if (cur_pair && cur_pair->key != pair->key) {
-					pair = cur_pair;
-					cur = !cur;
-				} else {
-					if (cur_pair) free(cur_pair);
-					return 1;
-				}
-			}
+	for (size_t i = 0; i < h->a.length; i++) {
+		uint64_t hash = 0;
+		List *list = 0;
+		if (cur) {
+			hash = hash1(pair->key) % h->a.length;
+			list = &h->a;
+		} else {
+			hash = hash2(pair->key) % h->b.length;
+			list = &h->b;
 		}
-		_rehash(h);
+		Keyval *ret = _aux_set_hashtable(h, pair, list, hash);
+		if (ret) {
+			pair = ret;
+			cur = !cur;
+		} else {
+			return 1;
+		}
 	}
+	_rehash(h);
+	free(pair);
+	return set_hashtable(h, pair->key, pair->val);
+}
+
+Keyval *_aux_set_hashtable(Hashtable *h, Keyval *new_pair,
+                           List *list, uint64_t hash) {
+	Keyval *pair = access_list(list, hash);
+	if (pair) {
+		if (pair->key == new_pair->key) {
+			pair->val = new_pair->val;
+			free(new_pair);
+			return 0;
+		}
+	}
+	set_list(list, hash, new_pair);
+	return pair;
 }
 
 void *access_hashtable(const Hashtable *h, const char *key) {

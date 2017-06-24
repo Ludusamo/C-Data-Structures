@@ -34,6 +34,7 @@ int set_hashtable(Hashtable *h, const char *key, void *val) {
 					pair = cur_pair;
 					cur = !cur;
 				} else {
+					if (cur_pair) free(cur_pair);
 					return 1;
 				}
 			} else {
@@ -44,6 +45,7 @@ int set_hashtable(Hashtable *h, const char *key, void *val) {
 					pair = cur_pair;
 					cur = !cur;
 				} else {
+					if (cur_pair) free(cur_pair);
 					return 1;
 				}
 			}

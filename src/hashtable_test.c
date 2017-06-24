@@ -143,8 +143,10 @@ int run_hashtable_tests() {
 	set_array(&tests, 3, delete_hashtable_test);
 	set_array(&tests, 4, dtor_hashtable_test);
 
-	return run_tests("Hashtable Tests",
+	int ret = run_tests("Hashtable Tests",
 		&tests,
 		hashtable_test_setup,
 		hashtable_test_teardown);
+	dtor_array(&tests);
+	return ret;
 }

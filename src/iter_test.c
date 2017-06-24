@@ -70,5 +70,10 @@ int run_iter_tests() {
 	ctor_array(&tests, 1);
 	set_array(&tests, 0, iter_test);
 
-	return run_tests("Iter Tests", &tests, iter_test_setup, iter_test_teardown);
+	int ret = run_tests("Iter Tests",
+		&tests,
+		iter_test_setup,
+		iter_test_teardown);
+	dtor_array(&tests);
+	return ret;
 }

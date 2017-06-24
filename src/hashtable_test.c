@@ -14,6 +14,7 @@ int hashtable_test_teardown(void **state) {
 void ctor_hashtable_test(void **state) {
 	Hashtable h;
 	ctor_hashtable(&h);
+	assert(h.size == 0);
 }
 
 void dtor_hashtable_test(void **state) {
@@ -41,6 +42,7 @@ void set_hashtable_test(void **state) {
 		data[val] = val;
 		set_hashtable(&h, (char *) i.val(&i), &data[val]);
 		val++;
+		assert(h.size == val);
 	}
 	destroy_iter_list(&iter);
 	iter_list(&iter, &keys);
@@ -129,6 +131,7 @@ void delete_hashtable_test(void **state) {
 		set_hashtable(&h, access_list(&keys, i), &arr[i]);
 	}
 	delete_hashtable(&h, "Test2");
+	assert(h.size == 9);
 	assert(!access_hashtable(&h, "Test2"));
 	dtor_list(&keys);
 	dtor_hashtable(&h);
@@ -158,6 +161,7 @@ void clear_hashtable_test(void **state) {
 	for (int i = 0; i < 10; i++) {
 		assert(!access_hashtable(&h, access_list(&keys, i)));
 	}
+	assert(h.size == 0);
 	assert(h.capacity == 0);
 	dtor_list(&keys);
 	dtor_hashtable(&h);

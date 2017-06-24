@@ -4,6 +4,7 @@ int ctor_hashtable(Hashtable *h) {
 	ctor_list(&h->a);
 	ctor_list(&h->b);
 	h->capacity = 0;
+	h->size = 0;
 	return 1;
 }
 
@@ -32,6 +33,7 @@ int set_hashtable(Hashtable *h, const char *key, void *val) {
 			pair = ret;
 			cur = !cur;
 		} else {
+			h->size++;
 			return 1;
 		}
 	}
@@ -45,6 +47,7 @@ Keyval *_aux_set_hashtable(Hashtable *h, Keyval *new_pair,
 	Keyval *pair = access_list(list, hash);
 	if (pair) {
 		if (pair->key == new_pair->key) {
+			h->size--;
 			pair->val = new_pair->val;
 			free(new_pair);
 			return 0;
@@ -78,6 +81,7 @@ int _rehash(Hashtable *h) {
 	clear_list(&h->b);
 	resize_list(&h->a, h->capacity, 0);
 	resize_list(&h->b, h->capacity, 0);
+	h->size = 0;
 	for (size_t i = 0; i < keyvals.length; i++) {
 		Keyval *keyval = access_list(&keyvals, i);
 		set_hashtable(h, keyval->key, keyval->val);
@@ -89,6 +93,7 @@ int _rehash(Hashtable *h) {
 }
 
 int delete_hashtable(Hashtable *h, const char *key) {
+	h->size--;
 	uint64_t h1 = hash1(key) % h->a.length;
 	Keyval *pair = access_list(&h->a, h1);
 	if (pair->key == key) {
@@ -115,6 +120,8 @@ int clear_hashtable(Hashtable *h) {
 	}
 	clear_list(&h->a);
 	clear_list(&h->b);
+	h->size = 0;
+	h->capacity = 0;
 	return 1;
 }
 

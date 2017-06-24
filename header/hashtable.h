@@ -13,6 +13,7 @@ typedef struct {
 typedef struct {
 	List a, b;
 	size_t capacity;
+	size_t size;
 } Hashtable;
 
 int ctor_hashtable(Hashtable *h);

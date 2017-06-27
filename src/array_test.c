@@ -67,9 +67,8 @@ void add_array_test(void **state) {
 	Array *added_array = add_array(*state, *state);
 	int should_be = 0;
 	Iter iter;
-	iter_array(&iter, added_array);
-	Iter i;
-	foreach(i, iter) {
+	iter_array(&iter, *state);
+	foreach(i, ) {
 		assert((should_be++) % 10 == *(int*)i.val(&i));
 	}
 	destroy_iter_array(&iter);
@@ -87,7 +86,6 @@ void iter_array_test(void **state) {
 	int should_be = 0;
 	Iter iter;
 	iter_array(&iter, *state);
-	Iter i;
 	foreach(i, iter) {
 		assert(should_be++ == *((int*)i.val(&i)));
 	}

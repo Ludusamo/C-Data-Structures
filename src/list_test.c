@@ -183,7 +183,6 @@ void iter_list_test(void **state) {
 	}
 	Iter iter;
 	iter_list(&iter, &l1);
-	Iter i;
 	int should_be = 0;
 	foreach(i, iter) {
 		assert(should_be++ == *(int*) i.val(&i));

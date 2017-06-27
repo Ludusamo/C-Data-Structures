@@ -181,13 +181,13 @@ void iter_list_test(void **state) {
 		a[i] = i;
 		append_list(&l1, &a[i]);
 	}
-	Iter iter;
-	iter_list(&iter, &l1);
+	Iter i;
+	iter_list(&i, &l1);
 	int should_be = 0;
-	foreach(i, iter) {
+	foreach(i) {
 		assert(should_be++ == *(int*) i.val(&i));
 	}
-	destroy_iter_list(&iter);
+	destroy_iter_list(&i);
 	dtor_list(&l1);
 }
 

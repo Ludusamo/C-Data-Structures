@@ -1,8 +1,7 @@
 #ifndef ITER_H
 #define ITER_H
 
-#define foreach(var, iter_ctor) Iter var;\
-                                for(var = iter; var.done(&var); var.next(&var))
+#define foreach(iter) for(; iter.done(&iter); iter.next(&iter))
 
 typedef struct Iter Iter;
 

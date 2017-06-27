@@ -66,12 +66,12 @@ void add_array_test(void **state) {
 	}
 	Array *added_array = add_array(*state, *state);
 	int should_be = 0;
-	Iter iter;
-	iter_array(&iter, *state);
-	foreach(i, ) {
+	Iter i;
+	iter_array(&i, *state);
+	foreach(i) {
 		assert((should_be++) % 10 == *(int*)i.val(&i));
 	}
-	destroy_iter_array(&iter);
+	destroy_iter_array(&i);
 	dtor_array(added_array);
 	free(testArr);
 	free(added_array);
@@ -84,12 +84,12 @@ void iter_array_test(void **state) {
 		set_array(*state, i, &testArr[i]);
 	}
 	int should_be = 0;
-	Iter iter;
-	iter_array(&iter, *state);
-	foreach(i, iter) {
+	Iter i;
+	iter_array(&i, *state);
+	foreach(i) {
 		assert(should_be++ == *((int*)i.val(&i)));
 	}
-	destroy_iter_array(&iter);
+	destroy_iter_array(&i);
 	free(testArr);
 }
 

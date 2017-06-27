@@ -33,21 +33,19 @@ void set_hashtable_test(void **state) {
 	append_list(&keys, "Test2");
 	append_list(&keys, "Test3");
 	append_list(&keys, "Test4");
-	Iter iter;
-	iter_list(&iter, &keys);
 	Iter i;
+	iter_list(&i, &keys);
 	int data[keys.length];
 	int val = 0;
-	foreach (i, iter) {
+	foreach (i) {
 		data[val] = val;
-		set_hashtable(&h, (char *) i.val(&i), &data[val]);
-		val++;
-		assert(h.size == val);
+		set_hashtable(&h, i.val(&i), &data[val]);
+		val++; assert(h.size == val);
 	}
-	destroy_iter_list(&iter);
-	iter_list(&iter, &keys);
+	destroy_iter_list(&i);
+	iter_list(&i, &keys);
 	val = 0;
-	foreach (i, iter) {
+	foreach (i) {
 		Keyval *l1 = access_list(&h.a, hash1((char *) i.val(&i)) % h.a.length);
 		Keyval *l2 = access_list(&h.b, hash2((char *) i.val(&i)) % h.b.length);
 		if (l1 && l2) {
@@ -64,7 +62,7 @@ void set_hashtable_test(void **state) {
 		}
 		val++;
 	}
-	destroy_iter_list(&iter);
+	destroy_iter_list(&i);
 	int a = 17;
 	set_hashtable(&h, access_list(&keys, 0), &a);
 	Keyval *l1 = access_list(&h.a, hash1("Test") % h.a.length);
@@ -167,15 +165,45 @@ void clear_hashtable_test(void **state) {
 	dtor_hashtable(&h);
 }
 
+void iter_hashtable_test(void **state) {
+	Hashtable h;
+	List keys;
+	ctor_list(&keys);
+	append_list(&keys, "Test");
+	append_list(&keys, "Test2");
+	append_list(&keys, "Test3");
+	append_list(&keys, "Test4");
+	append_list(&keys, "Test5");
+	append_list(&keys, "Test6");
+	append_list(&keys, "Test7");
+	append_list(&keys, "Test8");
+	append_list(&keys, "Test9");
+	append_list(&keys, "Test10");
+	ctor_hashtable(&h);
+	int arr[10];
+	for (int i = 0; i < 10; i++) {
+		arr[i] = i;
+		set_hashtable(&h, access_list(&keys, i), &arr[i]);
+	}
+	Iter i;
+	iter_hashtable(&i, &h);
+	foreach (i) {
+		assert(i.val(&i));
+	}
+	destroy_iter_hashtable(&i);
+	dtor_list(&keys);
+	dtor_hashtable(&h);
+}
 int run_hashtable_tests() {
 	Array tests;
-	ctor_array(&tests, 6);
+	ctor_array(&tests, 7);
 	set_array(&tests, 0, ctor_hashtable_test);
 	set_array(&tests, 1, set_hashtable_test);
 	set_array(&tests, 2, access_hashtable_test);
 	set_array(&tests, 3, delete_hashtable_test);
 	set_array(&tests, 4, delete_hashtable_test);
-	set_array(&tests, 5, dtor_hashtable_test);
+	set_array(&tests, 5, iter_hashtable_test);
+	set_array(&tests, 6, dtor_hashtable_test);
 
 	int ret = run_tests("Hashtable Tests",
 		&tests,

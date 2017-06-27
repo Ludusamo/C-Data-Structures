@@ -31,4 +31,11 @@ Keyval *_aux_set_hashtable(Hashtable *h, Keyval *new_pair,
 uint64_t hash1(const char *str);
 uint64_t hash2(const char *str);
 
+void next_iter_hashtable(Iter *self);
+int done_iter_hashtable(const Iter *self);
+void *val_iter_hashtable(const Iter *self);
+
+int iter_hashtable(Iter *self, Hashtable *h);
+void destroy_iter_hashtable(Iter *self);
+
 #endif // HASHTABLE_H

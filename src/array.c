@@ -29,21 +29,20 @@ void *access_array(const Array *array, int index) {
 }
 
 Array *add_array(Array *arr1, Array *arr2) {
-	Iter iter1, iter2;
-	iter_array(&iter1, arr1);
-	iter_array(&iter2, arr2);
 	Array *new_array = malloc(sizeof(Array));
 	ctor_array(new_array, arr1->length + arr2->length);
 	int index = 0;
 	Iter i;
-	foreach(i, iter1) {
+	iter_array(&i, arr1);
+	foreach(i) {
 		set_array(new_array, index++, i.val(&i));
 	}
-	foreach(i, iter2) {
+	destroy_iter_array(&i);
+	iter_array(&i, arr2);
+	foreach(i) {
 		set_array(new_array, index++, i.val(&i));
 	}
-	destroy_iter_array(&iter1);
-	destroy_iter_array(&iter2);
+	destroy_iter_array(&i);
 	return new_array;
 }
 

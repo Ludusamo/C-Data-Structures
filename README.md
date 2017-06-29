@@ -4,6 +4,7 @@ Set of Data Structures implemented in C.
 
 Data Structures that are (or going to be) implemented in this repository:
 
+- [ ] Value
 - [x] Array
 - [x] Dynamic Arrays (List)
 - [ ] Tuple
@@ -14,6 +15,5 @@ Data Structures that are (or going to be) implemented in this repository:
 - [ ] Binary Search Tree
 - [ ] Priority Queue
 - [ ] Heap
-- [ ] Map
-- [ ] Hash Table
+- [x] Hash Table
 - [ ] Huffman

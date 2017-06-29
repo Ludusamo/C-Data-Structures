@@ -33,3 +33,6 @@ remove:
 
 memcheck:
 	valgrind --leak-check=full --tool=memcheck $(BINDIR)/$(TARGET)
+
+memcheckfull:
+	valgrind --leak-check=full --show-leak-kinds=all --tool=memcheck $(BINDIR)/$(TARGET)

@@ -19,12 +19,16 @@ void value_double_test(void **state) {
 	*(Value*)(*state) = from_double(3.1f);
 	assert(is_double(*(Value*)*state));
 	assert(((Value*) *state)->as_double == 3.1f);
+	*(Value*)(*state) = from_double(3);
+	assert(!is_double(*(Value*)*state));
 }
 
 void value_int_test(void **state) {
 	*(Value*)(*state) = from_double(59221);
 	assert(is_int32(*(Value*)*state));
 	assert(((Value*)*state)->as_int32 == 59221);
+	*(Value*)(*state) = from_double(3.1);
+	assert(!is_int32(*(Value*)*state));
 }
 
 void value_ptr_test(void **state) {
@@ -32,6 +36,8 @@ void value_ptr_test(void **state) {
 	*(Value*)(*state) = from_ptr(str);
 	assert(is_ptr(*(Value*)*state));
 	assert((char*) (((Value*) *state)->bits & ~ptr_mask) == str);
+	str = "New string";
+	assert((char*) (((Value*) *state)->bits & ~ptr_mask) != str);
 }
 
 int run_value_tests() {

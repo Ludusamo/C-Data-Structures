@@ -9,7 +9,7 @@ int run_tests(const char *name,
 	void *state;
 	setup(&state);
 	for (int i = 0; i < tests->length; i++) {
-		((Test) access_array(tests, i))(&state);
+		((Test) (access_array(tests, i).bits & ~ptr_mask))(&state);
 		printf("Passed\n");
 	}
 	teardown(&state);

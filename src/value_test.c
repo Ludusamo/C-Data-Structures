@@ -43,9 +43,9 @@ void value_ptr_test(void **state) {
 int run_value_tests() {
 	Array tests;
 	ctor_array(&tests, 3);
-	set_array(&tests, 0, value_double_test);
-	set_array(&tests, 1, value_int_test);
-	set_array(&tests, 2, value_ptr_test);
+	set_array(&tests, 0, from_ptr(value_double_test));
+	set_array(&tests, 1, from_ptr(value_int_test));
+	set_array(&tests, 2, from_ptr(value_ptr_test));
 
 	int ret = run_tests("Value Tests",
 	                    &tests,

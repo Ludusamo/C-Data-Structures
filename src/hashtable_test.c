@@ -29,24 +29,24 @@ void set_hashtable_test(void **state) {
 
 	List keys;
 	ctor_list(&keys);
-	append_list(&keys, "Test");
-	append_list(&keys, "Test2");
-	append_list(&keys, "Test3");
-	append_list(&keys, "Test4");
+	append_list(&keys, from_ptr("Test"));
+	append_list(&keys, from_ptr("Test2"));
+	append_list(&keys, from_ptr("Test3"));
+	append_list(&keys, from_ptr("Test4"));
 	Iter i;
 	iter_list(&i, &keys);
-	int data[keys.length];
 	int val = 0;
 	foreach (i) {
-		data[val] = val;
-		set_hashtable(&h, i.val(&i), &data[val]);
-		val++; assert(h.size == val);
+		set_hashtable(&h, (char*) (i.val(&i).bits & ~ptr_mask), 
+		              from_double(val));
+		assert(h.size == val);
 	}
 	destroy_iter_list(&i);
 	iter_list(&i, &keys);
 	val = 0;
 	foreach (i) {
-		Keyval *l1 = access_list(&h.a, hash1((char *) i.val(&i)) % h.a.length);
+		Keyval *l1 = (Keyval*) (access_list(&h.a,
+		                                    hash1((char *) (i.val(&i).bits & ~ptr_mask)) % h.a.length).bits & ~ptr_mask);
 		Keyval *l2 = access_list(&h.b, hash2((char *) i.val(&i)) % h.b.length);
 		if (l1 && l2) {
 			assert((l1->key == (char*) i.val(&i) &&

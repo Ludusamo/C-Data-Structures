@@ -108,7 +108,7 @@ int done_iter_list(const Iter *self) {
 	return *(int*) self->data[1] < *(int*) self->data[2];
 }
 
-void *val_iter_list(const Iter *self) {
+Value val_iter_list(const Iter *self) {
 	return access_list((List *) self->data[0], *(int*) self->data[1]);
 }
 

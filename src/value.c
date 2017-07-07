@@ -32,3 +32,7 @@ Value from_ptr(void *p) {
 	assert((p_i & ptr_mask) == 0);
 	return (Value) { .bits = p_i | ptr_mask };
 }
+
+void *get_ptr(Value v) {
+	return v.bits & ~ptr_mask;
+}

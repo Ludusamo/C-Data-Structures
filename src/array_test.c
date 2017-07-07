@@ -29,79 +29,68 @@ void dtor_array_test(void **state) {
 }
 
 void set_array_test(void **state) {
-	int *a = malloc(sizeof(int));
-	*a = 10;
-	set_array(*state, 0, a);
-	assert(*a == *(int*)(((Array *)(*state))->data[0]));
-	int *b = malloc(sizeof(int));
-	*b = 20;
-	set_array(*state, 5, b);
-	assert(*b == *(int*)(((Array *)(*state))->data[5]));
-	set_array(*state, 0, b);
-	assert(*b == *(int*)(((Array *)(*state))->data[0]));
-	free(a);
-	free(b);
+	int a = 10;
+	set_array(*state, 0, from_double(a));
+	assert(is_int32((((Array *)(*state))->data[0])));
+	assert(a == (((Array *)(*state))->data[0]).as_int32);
+	int b = 20;
+	set_array(*state, 5, from_double(b));
+	assert(is_int32(((Array *)(*state))->data[5]));
+	assert(b == (((Array *)(*state))->data[5]).as_int32);
+	set_array(*state, 0, from_double(b));
+	assert(is_int32((((Array *)(*state))->data[0])));
+	assert(b == (((Array *)(*state))->data[5]).as_int32);
 }
 
 void access_array_test(void **state) {
-	int *a = malloc(sizeof(int));
-	*a = 20;
-	set_array(*state, 0, a);
-	int *b = malloc(sizeof(int));
-	*b = 20;
-	set_array(*state, 5, b);
-	int *c = (int *) access_array(*state, 0);
-	assert(20 == *c);
-	int *d = (int *) access_array(*state, 5);
-	assert(20 == *d);
-	free(a);
-	free(b);
+	int a = 20;
+	set_array(*state, 0, from_double(a));
+	int b = 20;
+	set_array(*state, 5, from_double(b));
+	int c = access_array(*state, 0).as_int32;
+	assert(20 == c);
+	int d = access_array(*state, 5).as_int32;
+	assert(20 == d);
 }
 
 void add_array_test(void **state) {
-	int *testArr = calloc(sizeof(int), ((Array*)(*state))->length);
 	for (int i = 0; i < ((Array*)(*state))->length; i++) {
-		testArr[i] = i;
-		set_array(*state, i, &testArr[i]);
+		set_array(*state, i, from_double(i));
 	}
 	Array *added_array = add_array(*state, *state);
 	int should_be = 0;
 	Iter i;
 	iter_array(&i, *state);
 	foreach(i) {
-		assert((should_be++) % 10 == *(int*)i.val(&i));
+		assert((should_be++) == i.val(&i).as_int32);
 	}
 	destroy_iter_array(&i);
 	dtor_array(added_array);
-	free(testArr);
 	free(added_array);
 }
 
 void iter_array_test(void **state) {
-	int *testArr = calloc(sizeof(int), ((Array*)(*state))->length);
 	for (int i = 0; i < ((Array*)(*state))->length; i++) {
-		testArr[i] = i;
-		set_array(*state, i, &testArr[i]);
+		set_array(*state, i, from_double(i));
 	}
 	int should_be = 0;
 	Iter i;
 	iter_array(&i, *state);
 	foreach(i) {
-		assert(should_be++ == *((int*)i.val(&i)));
+		assert(should_be++ == i.val(&i).as_int32);
 	}
 	destroy_iter_array(&i);
-	free(testArr);
 }
 
 int run_array_tests() {
 	Array tests;
 	ctor_array(&tests, 6);
-	set_array(&tests, 0, ctor_array_test);
-	set_array(&tests, 1, set_array_test);
-	set_array(&tests, 2, access_array_test);
-	set_array(&tests, 3, iter_array_test);
-	set_array(&tests, 4, add_array_test);
-	set_array(&tests, 5, dtor_array_test);
+	set_array(&tests, 0, from_ptr(ctor_array_test));
+	set_array(&tests, 1, from_ptr(set_array_test));
+	set_array(&tests, 2, from_ptr(access_array_test));
+	set_array(&tests, 3, from_ptr(iter_array_test));
+	set_array(&tests, 4, from_ptr(add_array_test));
+	set_array(&tests, 5, from_ptr(dtor_array_test));
 
 	int ret = run_tests("Array Tests", &tests, array_test_setup, array_test_teardown);
 	dtor_array(&tests);

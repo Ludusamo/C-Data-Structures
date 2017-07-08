@@ -34,5 +34,5 @@ Value from_ptr(void *p) {
 }
 
 void *get_ptr(Value v) {
-	return v.bits & ~ptr_mask;
+	return (void*) (v.bits & ~ptr_mask);
 }

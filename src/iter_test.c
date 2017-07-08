@@ -14,9 +14,9 @@ Value val_test(const Iter *self) {
 }
 
 int iter_test_setup(void **state) {
-	int *arr = calloc(sizeof(int), 10);
+	Value *arr = calloc(sizeof(Value), 10);
 	for (int i = 0; i < 10; i++) {
-		arr[i] = i;
+		arr[i] = from_double(i);
 	}
 
 	Iter *iter = malloc(sizeof(Iter));

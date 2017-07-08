@@ -45,7 +45,7 @@ int set_hashtable(Hashtable *h, const char *key, Value val) {
 
 Keyval *_aux_set_hashtable(Hashtable *h, Keyval *new_pair,
                            List *list, uint64_t hash) {
-	Keyval *pair = (Keyval*) (access_list(list, hash).bits & ~ptr_mask);
+	Keyval *pair = get_ptr(access_list(list, hash));
 	if (pair) {
 		if (pair->key == new_pair->key) {
 			h->size--;
@@ -60,10 +60,10 @@ Keyval *_aux_set_hashtable(Hashtable *h, Keyval *new_pair,
 
 Value access_hashtable(const Hashtable *h, const char *key) {
 	uint64_t h1 = hash1(key) % h->a.length;
-	Keyval *pair = (Keyval*) (access_list(&h->a, h1).bits & ~ptr_mask);
+	Keyval *pair = get_ptr(access_list(&h->a, h1));
 	if (pair && pair->key == key) return pair->val;
 	uint64_t h2 = hash2(key) % h->b.length;
-	pair = (Keyval*) (access_list(&h->b, h2).bits & ~ptr_mask);
+	pair = get_ptr(access_list(&h->b, h2));
 	if (pair && pair->key == key) return pair->val;
 	return nil_val;
 }
@@ -72,9 +72,9 @@ int _rehash(Hashtable *h) {
 	List keyvals;
 	ctor_list(&keyvals);
 	for (size_t i = 0; i < h->capacity / 2; i++) {
-		Keyval *a = (Keyval*) (access_list(&h->a, i).bits & ~ptr_mask);
+		Keyval *a = get_ptr(access_list(&h->a, i));
 		if (a) append_list(&keyvals, from_ptr(a));
-		Keyval *b = (Keyval*) (access_list(&h->b, i).bits & ~ptr_mask);
+		Keyval *b = get_ptr(access_list(&h->b, i));
 		if (b) append_list(&keyvals, from_ptr(b));
 	}
 	if (h->capacity < 1) h->capacity = 1;
@@ -84,7 +84,7 @@ int _rehash(Hashtable *h) {
 	resize_list(&h->b, h->capacity, nil_val);
 	h->size = 0;
 	for (size_t i = 0; i < keyvals.length; i++) {
-		Keyval *keyval = (Keyval*) (access_list(&keyvals, i).bits & ~ptr_mask);
+		Keyval *keyval = get_ptr(access_list(&keyvals, i));
 		set_hashtable(h, keyval->key, keyval->val);
 		free(keyval);
 	}
@@ -96,14 +96,14 @@ int _rehash(Hashtable *h) {
 int delete_hashtable(Hashtable *h, const char *key) {
 	h->size--;
 	uint64_t h1 = hash1(key) % h->a.length;
-	Keyval *pair = (Keyval*) (access_list(&h->a, h1).bits & ~ptr_mask);
+	Keyval *pair = get_ptr(access_list(&h->a, h1));
 	if (pair->key == key) {
 		set_list(&h->a, h1, nil_val);
 		free(pair);
 		return 1;
 	}
 	uint64_t h2 = hash2(key) % h->b.length;
-	pair = (Keyval*) (access_list(&h->b, h2).bits & ~ptr_mask);
+	pair = get_ptr(access_list(&h->b, h2));
 	if (pair->key == key) {
 		set_list(&h->b, h2, nil_val);
 		free(pair);
@@ -114,9 +114,9 @@ int delete_hashtable(Hashtable *h, const char *key) {
 
 int clear_hashtable(Hashtable *h) {
 	for (size_t i = 0; i < h->capacity / 2; i++) {
-		Keyval *a = (Keyval*) (access_list(&h->a, i).bits & ~ptr_mask);
+		Keyval *a = get_ptr(access_list(&h->a, i));
 		if (a) free(a);
-		Keyval *b = (Keyval*) (access_list(&h->b, i).bits & ~ptr_mask);
+		Keyval *b = get_ptr(access_list(&h->b, i));
 		if (b) free(b);
 	}
 	clear_list(&h->a);

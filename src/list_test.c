@@ -87,7 +87,7 @@ void resize_list_test(void **state) {
 	clear_list(list);
 	resize_list(list, 100, nil_val);
 	assert(100 == list->length);
-	assert(17 == access_array(&list->array, 25).as_int32);
+	assert(nil_val.bits == access_array(&list->array, 25).bits);
 }
 
 void reserve_space_list_test(void **state) {

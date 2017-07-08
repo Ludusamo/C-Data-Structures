@@ -11,7 +11,7 @@
 #include "assert.h"
 
 typedef struct {
-	int *arr;
+	Value *arr;
 	Iter *iter;
 } Iter_Test_Container;
 

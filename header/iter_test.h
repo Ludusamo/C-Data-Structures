@@ -11,13 +11,13 @@
 #include "assert.h"
 
 typedef struct {
-	int *arr;
+	Value *arr;
 	Iter *iter;
 } Iter_Test_Container;
 
 void next_test(Iter *self);
 int done_test(const Iter *self);
-void *val_test(const Iter *self);
+Value val_test(const Iter *self);
 
 int iter_test_setup(void **state);
 int iter_test_teardown(void **state);

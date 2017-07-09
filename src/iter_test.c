@@ -9,14 +9,14 @@ int done_test(const Iter *self) {
 	return *((int*)self->data[1]) != *((int*) self->data[2]);
 }
 
-void *val_test(const Iter *self) {
-	return &((int*) self->data[0])[*((int*) self->data[1])];
+Value val_test(const Iter *self) {
+	return ((Value*) self->data[0])[*((int*) self->data[1])];
 }
 
 int iter_test_setup(void **state) {
-	int *arr = calloc(sizeof(int), 10);
+	Value *arr = calloc(sizeof(Value), 10);
 	for (int i = 0; i < 10; i++) {
-		arr[i] = i;
+		arr[i] = from_double(i);
 	}
 
 	Iter *iter = malloc(sizeof(Iter));
@@ -61,14 +61,14 @@ void iter_test(void **state) {
 	int should_be = 0;
 
 	for (Iter *i = iter; i->done(i); i->next(i)) {
-		assert(should_be++ == *((int*)i->val(i)));
+		assert(should_be++ == i->val(i).as_int32);
 	}
 }
 
 int run_iter_tests() {
 	Array tests;
 	ctor_array(&tests, 1);
-	set_array(&tests, 0, iter_test);
+	set_array(&tests, 0, from_ptr(iter_test));
 
 	int ret = run_tests("Iter Tests",
 		&tests,

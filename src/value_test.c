@@ -43,10 +43,10 @@ void value_ptr_test(void **state) {
 
 void value_obj_test(void **state) {
 	int a = 33;
-	Obj o = (Obj) { "int", &a };
+	Obj o = (Obj) { 0, &a };
 	*(Value*)(*state) = from_obj(&o);
 	assert(is_obj(*(Value*)*state));
-	assert(get_obj(*(Value*)*state)->type == "int");
+	assert(get_obj(*(Value*)*state)->type == 0);
 	assert(*(int*) (get_obj(*(Value*)*state)->ptr) == a);
 }
 

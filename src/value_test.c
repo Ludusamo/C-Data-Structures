@@ -3,6 +3,7 @@
 #include <assert.h>
 #include "array.h"
 #include "test.h"
+#include "obj.h"
 
 int value_test_setup(void **state) {
 	*state = malloc(sizeof(Value));
@@ -40,12 +41,22 @@ void value_ptr_test(void **state) {
 	assert((char*) (((Value*) *state)->bits & ~ptr_mask) != str);
 }
 
+void value_obj_test(void **state) {
+	int a = 33;
+	Obj o = (Obj) { "int", &a };
+	*(Value*)(*state) = from_obj(&o);
+	assert(is_obj(*(Value*)*state));
+	assert(get_obj(*(Value*)*state)->type == "int");
+	assert(*(int*) (get_obj(*(Value*)*state)->ptr) == a);
+}
+
 int run_value_tests() {
 	Array tests;
-	ctor_array(&tests, 3);
+	ctor_array(&tests, 4);
 	set_array(&tests, 0, from_ptr(value_double_test));
 	set_array(&tests, 1, from_ptr(value_int_test));
 	set_array(&tests, 2, from_ptr(value_ptr_test));
+	set_array(&tests, 3, from_ptr(value_obj_test));
 
 	int ret = run_tests("Value Tests",
 	                    &tests,

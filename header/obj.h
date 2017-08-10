@@ -2,8 +2,8 @@
 #define OBJ_H
 
 typedef struct Obj_S {
-	int type;
-	void *ptr;
+    int type;
+    void *ptr;
 } Obj;
 
 #endif // OBJ_H

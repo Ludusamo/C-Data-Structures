@@ -5,9 +5,9 @@
 #include "obj.h"
 
 typedef union {
-	double as_double;
-	uint64_t bits;
-	int32_t as_int32;
+    double as_double;
+    uint64_t bits;
+    int32_t as_int32;
 } Value;
 
 static const Value nil_val = { .bits = 0xFFF00000ULL << 32 };

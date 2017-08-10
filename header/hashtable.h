@@ -6,14 +6,14 @@
 #include "list.h"
 
 typedef struct {
-	const char *key;
-	Value val;
+    const char *key;
+    Value val;
 } Keyval;
 
 typedef struct {
-	List a, b;
-	size_t capacity;
-	size_t size;
+    List a, b;
+    size_t capacity;
+    size_t size;
 } Hashtable;
 
 int ctor_hashtable(Hashtable *h);

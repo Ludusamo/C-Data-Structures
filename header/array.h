@@ -7,8 +7,8 @@
 #include "value.h"
 
 typedef struct {
-	Value *data;
-	size_t length;
+    Value *data;
+    size_t length;
 } Array;
 
 int ctor_array(Array *array, size_t len);

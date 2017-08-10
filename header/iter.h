@@ -8,10 +8,10 @@
 typedef struct Iter Iter;
 
 struct Iter {
-	void **data;
-	void (*next)(Iter *self);
-	int (*done)(const Iter *self);
-	Value (*val)(const Iter *self);
+    void **data;
+    void (*next)(Iter *self);
+    int (*done)(const Iter *self);
+    Value (*val)(const Iter *self);
 };
 
 #endif // ITER_H

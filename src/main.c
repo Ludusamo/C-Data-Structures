@@ -5,10 +5,10 @@
 #include "value_test.h"
 
 int main() {
-	run_iter_tests();
-	run_array_tests();
-	run_list_tests();
-	run_hashtable_tests();
-	run_value_tests();
-	return 0;
+    run_iter_tests();
+    run_array_tests();
+    run_list_tests();
+    run_hashtable_tests();
+    run_value_tests();
+    return 0;
 }

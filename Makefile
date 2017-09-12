@@ -3,19 +3,34 @@ OBJDIR = obj
 BINDIR = bin
 
 SRC_FILES := $(wildcard $(SRCDIR)/*.c)
+
+RELEASE_SRC_FILES := $(filter-out main.c, $(SRC_FILES))
+RELEASE_SRC_FILES := $(filter-out src/*_test.c, $(SRC_FILES))
+
 OBJECTS :=  $(SRC_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+RELEASE_OBJECTS :=  $(RELEASE_SRC_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o.release)
 rm = rm -f
 
 CC = clang
 COMPILER_FLAGS = -std=c99 -Wall -Iheader
 
-LINKER = clang -o
+LINKER = clang
 LINKER_FLAGS = -Wall -Iheader
 
 TARGET = cds
 
-$(BINDIR)/$(TARGET): $(OBJECTS)
-	$(LINKER) $@ $(LINKER_FLAGS) $(OBJECTS)
+release: COMPILER_FLAGS += -O2 -fPIC
+
+release: $(RELEASE_OBJECTS)
+	$(CC) -shared -o $@ $(LINKER_FLAGS) $(RELEASE_OBJECTS)
+	echo "Linking Complete!"
+
+$(RELEASE_OBJECTS): $(OBJDIR)/%.o.release : $(SRCDIR)/%.c
+	$(CC) $(RELEASE_COMPILER_FLAGS) -c $< -o $@
+	echo "Compiled "$<" successfully!"
+
+debug: $(OBJECTS)
+	$(LINKER) $(BINDIR)/$(TARGET) $(LINKER_FLAGS) $(OBJECTS)
 	echo "Linking Complete!"
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
@@ -28,6 +43,8 @@ clean:
 
 remove:
 	make clean
+	$(rm) $(BINDIR)/$(TARGET)
+	echo "Executable removed!"
 	$(rm) $(BINDIR)/$(TARGET)
 	echo "Executable removed!"
 

@@ -24,10 +24,12 @@ LINKER_FLAGS = -Wall -Iheader
 TARGET = cds
 
 $(BINDIR)/lib$(TARGET).so: $(OBJECTS)
+	@if [ ! -d "bin" ]; then mkdir bin; fi
 	$(CC) -shared -o $@ $(LINKER_FLAGS) $(OBJECTS)
 	echo "Linking Complete!"
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
+	@if [ ! -d "obj" ]; then mkdir obj; fi
 	$(CC) -c $(CFLAGS) $< -o $@
 	echo "Compiled "$<" successfully!"
 

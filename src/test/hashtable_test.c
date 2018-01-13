@@ -93,6 +93,7 @@ void access_hashtable_test(void **state) {
     append_list(&keys, from_ptr("Test9"));
     append_list(&keys, from_ptr("Test10"));
     ctor_hashtable(&h);
+    assert(access_hashtable(&h, "test").bits == nil_val.bits);
     int arr[10];
     for (int i = 0; i < 10; i++) {
         arr[i] = i;

@@ -99,14 +99,14 @@ int delete_hashtable(Hashtable *h, const char *key) {
     h->size--;
     uint64_t h1 = hash1(key) % h->a.length;
     Keyval *pair = get_ptr(access_list(&h->a, h1));
-    if (strcmp(pair->key, key) == 0) {
+    if (pair && strcmp(pair->key, key) == 0) {
         set_list(&h->a, h1, nil_val);
         free(pair);
         return 1;
     }
     uint64_t h2 = hash2(key) % h->b.length;
     pair = get_ptr(access_list(&h->b, h2));
-    if (strcmp(pair->key, key) == 0) {
+    if (pair && strcmp(pair->key, key) == 0) {
         set_list(&h->b, h2, nil_val);
         free(pair);
         return 1;

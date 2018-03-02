@@ -46,6 +46,17 @@ Array *add_array(Array *arr1, Array *arr2) {
     return new_array;
 }
 
+Array *copy_array(Array *src, Array *dest) {
+    if (dest->length != src->length) {
+        dtor_array(dest);
+        ctor_array(dest, src->length);
+    }
+    for (size_t i = 0; i < src->length; i++) {
+        set_array(dest, i, access_array(src, i));
+    }
+    return dest;
+}
+
 void next_iter_array(Iter *self) {
     *((int*)self->data[1]) += 1;
 }

@@ -18,6 +18,7 @@ void dtor_array_test(void **state);
 void set_array_test(void **state);
 void access_array_test(void **state);
 void add_array_test(void **state);
+void copy_array_test(void **state);
 
 void iter_array_test(void **state);
 

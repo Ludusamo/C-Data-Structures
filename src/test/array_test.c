@@ -86,6 +86,9 @@ void copy_array_test(void **state) {
         assert(copy_not_same.data[i].bits == array.data[i].bits);
     }
     assert(copy_not_same.length == array.length);
+    dtor_array(&array);
+    dtor_array(&copy_same);
+    dtor_array(&copy_not_same);
 }
 
 void iter_array_test(void **state) {

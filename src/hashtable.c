@@ -128,6 +128,18 @@ int clear_hashtable(Hashtable *h) {
     return 1;
 }
 
+Hashtable *copy_hashtable(Hashtable *src, Hashtable *dest) {
+    clear_hashtable(dest);
+    Iter ih;
+    iter_hashtable(&ih, src);
+    foreach(ih) {
+        Keyval *kv = get_ptr(val_iter_hashtable(&ih));
+        set_hashtable(dest, kv->key, kv->val);
+    }
+    destroy_iter_hashtable(&ih);
+    return dest;
+}
+
 uint64_t hash1(const char *str) {
     uint64_t hash = 5381;
     int c;

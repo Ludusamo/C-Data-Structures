@@ -162,6 +162,36 @@ void clear_hashtable_test(void **state) {
     dtor_hashtable(&h);
 }
 
+void copy_hashtable_test(void **state) {
+    Hashtable h;
+    ctor_hashtable(&h);
+    List keys;
+    ctor_list(&keys);
+    append_list(&keys, from_ptr("Test"));
+    append_list(&keys, from_ptr("Test2"));
+    append_list(&keys, from_ptr("Test3"));
+    append_list(&keys, from_ptr("Test4"));
+    append_list(&keys, from_ptr("Test5"));
+    append_list(&keys, from_ptr("Test6"));
+    append_list(&keys, from_ptr("Test7"));
+    append_list(&keys, from_ptr("Test8"));
+    append_list(&keys, from_ptr("Test9"));
+    append_list(&keys, from_ptr("Test10"));
+    for (int i = 0; i < 10; i++) {
+        set_hashtable(&h, get_ptr(access_list(&keys, i)), from_double(i));
+    }
+    Hashtable copy;
+    ctor_hashtable(&copy);
+    copy_hashtable(&h, &copy);
+    for (size_t i = 0; i < keys.length; i++) {
+        const char *key = get_ptr(access_list(&keys, i));
+        assert(access_hashtable(&h, key).bits == access_hashtable(&copy, key).bits);
+    }
+    dtor_hashtable(&copy);
+    dtor_hashtable(&h);
+    dtor_list(&keys);
+}
+
 void iter_hashtable_test(void **state) {
     Hashtable h;
     List keys;
@@ -193,14 +223,15 @@ void iter_hashtable_test(void **state) {
 }
 int run_hashtable_tests() {
     Array tests;
-    ctor_array(&tests, 7);
+    ctor_array(&tests, 8);
     set_array(&tests, 0, from_ptr(ctor_hashtable_test));
     set_array(&tests, 1, from_ptr(set_hashtable_test));
     set_array(&tests, 2, from_ptr(access_hashtable_test));
     set_array(&tests, 3, from_ptr(delete_hashtable_test));
-    set_array(&tests, 4, from_ptr(delete_hashtable_test));
-    set_array(&tests, 5, from_ptr(iter_hashtable_test));
-    set_array(&tests, 6, from_ptr(dtor_hashtable_test));
+    set_array(&tests, 4, from_ptr(clear_hashtable_test));
+    set_array(&tests, 5, from_ptr(copy_hashtable_test));
+    set_array(&tests, 6, from_ptr(iter_hashtable_test));
+    set_array(&tests, 7, from_ptr(dtor_hashtable_test));
 
     int ret = run_tests("Hashtable Tests",
         &tests,

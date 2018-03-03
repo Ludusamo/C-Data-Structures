@@ -17,6 +17,7 @@ int dtor_array(Array *array);
 int set_array(Array *array, int index, Value val);
 Value access_array(const Array *array, int index);
 Array *add_array(Array *arr1, Array *arr2);
+Array *copy_array(Array *src, Array *dest);
 
 void next_iter_array(Iter *self);
 int done_iter_array(const Iter *self);

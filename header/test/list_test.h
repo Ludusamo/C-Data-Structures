@@ -25,6 +25,7 @@ void set_list_test(void **state);
 void access_list_test(void **state);
 void resize_list_test(void **state);
 void reserve_space_list_test(void **state);
+void copy_list_test(void **state);
 
 void iter_list_test(void **state);
 

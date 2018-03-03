@@ -69,6 +69,28 @@ void add_array_test(void **state) {
     free(added_array);
 }
 
+void copy_array_test(void **state) {
+    Array array;
+    ctor_array(&array, 10);
+    for (int i = 0; i < array.length; i++) {
+        set_array(&array, i, from_double(i));
+    }
+    Array copy_same;
+    ctor_array(&copy_same, 10);
+    copy_array(&array, &copy_same);
+    Array copy_not_same;
+    ctor_array(&copy_not_same, 15);
+    copy_array(&array, &copy_not_same);
+    for (int i = 0; i < array.length; i++) {
+        assert(copy_same.data[i].bits == array.data[i].bits);
+        assert(copy_not_same.data[i].bits == array.data[i].bits);
+    }
+    assert(copy_not_same.length == array.length);
+    dtor_array(&array);
+    dtor_array(&copy_same);
+    dtor_array(&copy_not_same);
+}
+
 void iter_array_test(void **state) {
     for (int i = 0; i < ((Array*)(*state))->length; i++) {
         set_array(*state, i, from_double(i));
@@ -84,13 +106,14 @@ void iter_array_test(void **state) {
 
 int run_array_tests() {
     Array tests;
-    ctor_array(&tests, 6);
+    ctor_array(&tests, 7);
     set_array(&tests, 0, from_ptr(ctor_array_test));
     set_array(&tests, 1, from_ptr(set_array_test));
     set_array(&tests, 2, from_ptr(access_array_test));
     set_array(&tests, 3, from_ptr(iter_array_test));
     set_array(&tests, 4, from_ptr(add_array_test));
-    set_array(&tests, 5, from_ptr(dtor_array_test));
+    set_array(&tests, 5, from_ptr(copy_array_test));
+    set_array(&tests, 6, from_ptr(dtor_array_test));
 
     int ret = run_tests("Array Tests", &tests, array_test_setup, array_test_teardown);
     dtor_array(&tests);

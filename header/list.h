@@ -21,7 +21,7 @@ Value access_list(const List *list, int index);
 List *add_list(List *lhs, List *rhs);
 int resize_list(List *list, size_t len, Value value);
 int reserve_space_list(List *list, size_t len);
-List *copy_list(List *src, List *dest);
+List *copy_list(const List *src, List *dest);
 
 int _grow_list(List *list);
 

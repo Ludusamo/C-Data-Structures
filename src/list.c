@@ -95,7 +95,7 @@ int reserve_space_list(List *list, size_t len) {
     return 1;
 }
 
-List *copy_list(List *src, List *dest) {
+List *copy_list(const List *src, List *dest) {
     dest->length = 0;
     for (size_t i = 0; i < src->length; i++) {
         append_list(dest, access_list(src, i));

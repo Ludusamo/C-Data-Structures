@@ -128,7 +128,7 @@ int clear_hashtable(Hashtable *h) {
     return 1;
 }
 
-Hashtable *copy_hashtable(Hashtable *src, Hashtable *dest) {
+Hashtable *copy_hashtable(const Hashtable *src, Hashtable *dest) {
     clear_hashtable(dest);
     Iter ih;
     iter_hashtable(&ih, src);

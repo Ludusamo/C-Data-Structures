@@ -23,7 +23,7 @@ int set_hashtable(Hashtable *h, const char *key, Value val);
 Value access_hashtable(const Hashtable *h, const char *key);
 int delete_hashtable(Hashtable *h, const char *key);
 int clear_hashtable(Hashtable *h);
-Hashtable *copy_hashtable(Hashtable *src, Hashtable *dest);
+Hashtable *copy_hashtable(const Hashtable *src, Hashtable *dest);
 
 int _rehash(Hashtable *h);
 Keyval *_aux_set_hashtable(Hashtable *h, Keyval *new_pair,

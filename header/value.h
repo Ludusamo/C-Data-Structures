@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#define get_ptrc(v, t) ((t) get_ptr(v))
+
 typedef union {
     double as_double;
     uint64_t bits;

@@ -50,6 +50,22 @@ void value_obj_test(void **state) {
 	assert(*(int*) (get_obj(*(Value*)*state)->ptr) == a);
 }
 
+void value_bool_test(void **state) {
+	Value t = true_val;
+	Value f = false_val;
+	assert(is_bool(true_val));
+	assert(is_bool(false_val));
+	assert(t.bits != f.bits);
+	assert(t.bits == t.bits);
+	assert(f.bits == f.bits);
+}
+
+void value_nil_test(void **state) {
+	Value nil = nil_val;
+	assert(is_nil(nil));
+	assert(nil.bits == nil.bits);
+}
+
 int run_value_tests() {
 	Array tests;
 	ctor_array(&tests, 4);

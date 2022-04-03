@@ -19,6 +19,8 @@ static const uint64_t int_mask = 0xFFFAULL << 48;
 static const uint64_t obj_mask = 0xFFFBULL << 48;
 
 int is_neg_zero(double d);
+int is_bool(Value v);
+int is_nil(Value v);
 int is_double(Value v);
 int is_ptr(Value v);
 int is_int32(Value v);

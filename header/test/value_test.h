@@ -10,6 +10,8 @@ void value_double_test(void **state);
 void value_int_test(void **state);
 void value_ptr_test(void **state);
 void value_obj_test(void **state);
+void value_bool_test(void **state);
+void value_nil_test(void **state);
 
 int run_value_tests();
 

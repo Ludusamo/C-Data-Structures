@@ -5,6 +5,14 @@ int is_neg_zero(double d) {
     return (int) d == 0 && (*(uint64_t*) &d >> 63) == 1;
 }
 
+int is_bool(Value v) {
+    return v.bits == true_val.bits || v.bits == false_val.bits;
+}
+
+int is_nil(Value v) {
+    return v.bits == nil_val.bits;
+}
+
 int is_double(Value v) {
     return v.bits <= max_double;
 }

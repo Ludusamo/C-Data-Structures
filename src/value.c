@@ -29,6 +29,10 @@ int is_obj(Value v) {
     return (v.bits & obj_mask) == obj_mask;
 }
 
+int is_fn(Value v) {
+    return (v.bits & fn_mask) == fn_mask;
+}
+
 Value from_double(double d) {
     Value v;
     if (d == (int32_t) d && !is_neg_zero(d)) {
@@ -51,10 +55,20 @@ Value from_obj(Obj *obj) {
     return (Value) { .bits = p_i | obj_mask };
 }
 
+Value from_fn(void *p) {
+    uintptr_t p_i = (uintptr_t) p;
+    assert((p_i & ptr_mask) == 0);
+    return (Value) { .bits = p_i | fn_mask };
+}
+
 void *get_ptr(Value v) {
     return (void*) (v.bits & ~ptr_mask);
 }
 
 Obj *get_obj(Value v) {
     return (Obj*) (v.bits & ~obj_mask);
+}
+
+void *get_fn(Value v) {
+    return (void*) (v.bits & ~fn_mask);
 }

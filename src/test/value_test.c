@@ -66,13 +66,28 @@ void value_nil_test(void **state) {
 	assert(nil.bits == nil.bits);
 }
 
+typedef int (*TestFn)(int a);
+
+static int test(int a) {
+	return a + a;
+}
+
+void value_fn_test(void **state) {
+	Value fn = from_fn(test);
+	TestFn native_fn = get_fn(fn);
+	assert(is_fn(fn));
+	assert(native_fn(1) == 2);
+}
+
 int run_value_tests() {
 	Array tests;
-	ctor_array(&tests, 4);
+	ctor_array(&tests, 6);
 	set_array(&tests, 0, from_ptr(value_double_test));
 	set_array(&tests, 1, from_ptr(value_int_test));
 	set_array(&tests, 2, from_ptr(value_ptr_test));
-	set_array(&tests, 3, from_ptr(value_obj_test));
+	set_array(&tests, 3, from_ptr(value_bool_test));
+	set_array(&tests, 4, from_ptr(value_nil_test));
+	set_array(&tests, 5, from_ptr(value_fn_test));
 
 	int ret = run_tests("Value Tests",
 	                    &tests,
